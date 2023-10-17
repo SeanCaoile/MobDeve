@@ -15,10 +15,20 @@ class DataGenerator {
             "The Cook",
             R.drawable.scrambledegg
         )
-
+        private val user1: UserModel = UserModel("John", arrayListOf<RecipeModel>(recipe1))
+        private val user2: UserModel = UserModel("Mary", arrayListOf<RecipeModel>(recipe1))
         fun generateRecipes() : ArrayList<RecipeModel>
         {
             return arrayListOf<RecipeModel>(recipe1)
+        }
+
+        fun generateUsers() : ArrayList<UserModel>
+        {
+            val users = ArrayList<UserModel>()
+            users.add(user1)
+            users.add(user2)
+
+            return users
         }
 
     }
