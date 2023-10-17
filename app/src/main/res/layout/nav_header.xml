@@ -6,7 +6,7 @@
     android:layout_height="120dp"
     android:foregroundGravity="bottom"
     android:paddingHorizontal="16dp"
-    android:background="@color/yellow"
+    android:background="@drawable/header"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
