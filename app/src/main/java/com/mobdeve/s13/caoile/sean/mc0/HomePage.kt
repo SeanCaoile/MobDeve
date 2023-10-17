@@ -1,14 +1,10 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
@@ -53,7 +49,7 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                 supportFragmentManager.beginTransaction().replace(R.id.fragment_container, IngredientsFragment()).commit()
             }
             R.id.recipe_nav -> {
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, RecipesFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, RecipeListFragment()).commit()
             }
             R.id.logout -> {
                 Toast.makeText(this,"Logout",Toast.LENGTH_SHORT).show()
