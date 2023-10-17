@@ -1,135 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<!--    tools:context=".MainActivity">-->
-
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/sidePanel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/panel_content"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+    android:layout_height="match_parent"
+    android:background="@color/lightYellow"
+    android:fitsSystemWindows="true"
+    tools:context=".HomePage"
+    tools:openDrawer="start">
 
     <LinearLayout
-        android:id="@+id/body_background"
-        app:layout_constraintTop_toBottomOf="@id/navbar"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#FFF2E4">
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/yellow"
+            app:titleTextColor="@color/black"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/navbar"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#FFE6A6"
-        android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingHorizontal="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:menu="@menu/nav_menu" />
 
-        <ImageView
-            android:id="@+id/guru_logo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_margin="30dp"
-            android:src="@drawable/gg_icon"></ImageView>
-
-
-        <ImageButton
-            android:id="@+id/hamburger_menu"
-            android:layout_width="50dp"
-            android:layout_height="70dp"
-            android:maxHeight="100dp"
-            android:maxWidth="100dp"
-            android:scaleType="fitCenter"
-            android:paddingHorizontal="-10dp"
-            android:backgroundTint="#FFE6A6"
-            app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@drawable/hamburger_menu" />
-
-
-        <ImageButton
-            android:id="@+id/users_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="#FFE6A6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/hamburger_menu"
-            android:maxWidth="100dp"
-            android:maxHeight="100dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/users_icon" />
-
-        <ImageButton
-            android:id="@+id/recipe_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="#FFE6A6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/users_icon"
-            android:maxWidth="60dp"
-            android:maxHeight="60dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/recipe_icon" />
-
-        <ImageButton
-            android:id="@+id/ingredients_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="#FFE6A6"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/recipe_icon"
-            android:maxWidth="70dp"
-            android:maxHeight="70dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ingredients_icon" />
-
-        <EditText
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/guru_logo"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginEnd="30dp"
-            android:ems="20"
-            android:inputType="text"
-            android:text="Search" />
-
-        <ImageButton
-            android:id="@+id/search_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="#FFE6A6"
-            app:layout_constraintTop_toBottomOf="@id/guru_logo"
-            app:layout_constraintRight_toLeftOf="@id/search_bar"
-            android:maxWidth="60dp"
-            android:maxHeight="60dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/search_icon" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

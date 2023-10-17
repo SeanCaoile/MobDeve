@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">MC0</string>
     <string name="ingredients">Ingredients</string>
     <string name="ingredient">Ingredient: </string>
     <string name="quantity">Quantity</string>
     <string name="sample">Sample Text</string>
     <string name="instructions">Instructions</string>
+    <string name="app_name">Gourmet Guru</string>
+    <string name="open_drawer">Open Navigation Drawer</string>
+    <string name="close_drawer">Close Navigation Drawer</string>
+
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/baseline_home_24"
+            android:title="Home"/>
+
+        <item
+            android:id="@+id/users_nav"
+            android:icon="@drawable/baseline_people_24"
+            android:title="Users"/>
+        <item
+            android:id="@+id/ingredients_nav"
+            android:icon="@drawable/ingredients_icon"
+            android:title="Ingredients"/>
+        <item
+            android:id="@+id/recipe_nav"
+            android:icon="@drawable/recipe_icon"
+            android:title="Recipes"/>
+    </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/logout"
+                android:title="Logout"/>
+        </menu>
+    </item>
+
+</menu>
