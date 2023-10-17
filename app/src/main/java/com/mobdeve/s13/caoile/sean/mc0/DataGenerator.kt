@@ -13,10 +13,10 @@ class DataGenerator {
                     "gently move spatula across bottom and side of skillet to form large, soft curds.\n" +
                     "3. Cook until eggs are thickened and no visible liquid egg remains, but the eggs are not dry.",
             "The Cook",
-            R.drawable.ScrambledEgg
+            R.drawable.scrambledegg
         )
 
-        fun generateData() : ArrayList<RecipeModel>
+        fun generateRecipes() : ArrayList<RecipeModel>
         {
             return arrayListOf<RecipeModel>(recipe1)
         }

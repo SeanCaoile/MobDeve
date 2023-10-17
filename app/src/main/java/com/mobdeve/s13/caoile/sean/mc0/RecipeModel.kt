@@ -15,4 +15,14 @@ class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, i
 
     var imageId = imageId
         private set
+
+    override fun toString(): String {
+        return "Recipe{" +
+                "ingredients='" + ingredients + '\'' +
+                ", name='" + recipeName +
+                ", instructions='" + instructions +
+                ", creator='" + creator +
+                ", image ='" + imageId +
+                '}'
+    }
 }
