@@ -35,7 +35,7 @@ class RecipeActivity : AppCompatActivity()  {
         food_creatorTv.text = intent.getStringExtra(RecipeActivity.CREATOR_KEY)
         instructionsTv.text = intent.getStringExtra(RecipeActivity.INSTRUCTIONS_KEY)
         recipeImg.setImageResource(intent.getIntExtra(RecipeActivity.IMG_KEY, 0))
-
+        
 
     }
 }
