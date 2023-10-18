@@ -45,16 +45,16 @@ class RecipeFragment : Fragment() {
 
     }
 
-    private fun showBottomDialog(){
-        val dialog = Dialog(requireContext())
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.bottomsheet_layout)
-
-        dialog.show()
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-        dialog.window?.setGravity(Gravity.BOTTOM)
-    }
+//    private fun showBottomDialog(){
+//        val dialog = Dialog(requireContext())
+//
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog.setContentView(R.layout.bottomsheet_layout)
+//
+//        dialog.show()
+//        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+//        dialog.window?.setGravity(Gravity.BOTTOM)
+//    }
 }

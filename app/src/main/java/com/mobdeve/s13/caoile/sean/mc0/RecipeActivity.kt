@@ -1,14 +1,21 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 
 class RecipeActivity : AppCompatActivity()  {
     companion object {
@@ -54,7 +61,19 @@ class RecipeActivity : AppCompatActivity()  {
 
 
         })
-        
+
+        fun showBottomDialog(){
+            val dialog = Dialog(this)
+
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.bottomsheet_layout)
+
+            dialog.show()
+            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+            dialog.window?.setGravity(Gravity.BOTTOM)
+        }
 
     }
 }
