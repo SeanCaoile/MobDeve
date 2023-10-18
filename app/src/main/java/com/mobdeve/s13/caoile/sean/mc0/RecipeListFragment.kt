@@ -1,13 +1,12 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.os.Bundle
-import android.provider.ContactsContract.Data
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -45,5 +44,8 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel) {
         Toast.makeText(requireContext(), recipe.recipeName + "", Toast.LENGTH_SHORT).show()
+
+
+
     }
 }
