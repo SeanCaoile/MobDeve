@@ -26,13 +26,14 @@ class UserListAdapter(private val data: ArrayList<UserModel>): RecyclerView.Adap
             // Inform the user of the deleted element
             Toast.makeText(
                 holder.itemView.context,
-                this.data[position].username + " has been unfollowed.",
+                "${data[position].username} has been unfollowed.",
                 Toast.LENGTH_SHORT
             ).show()
 
             // Remove the element from the data (i.e. ArrayList)
-            this.data.removeAt(position)
-            notifyDataSetChanged()
+            data.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemCount)
         })
     }
 
