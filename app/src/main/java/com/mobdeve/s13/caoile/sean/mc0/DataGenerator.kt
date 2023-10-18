@@ -15,6 +15,17 @@ class DataGenerator {
             "The Cook",
             R.drawable.scrambledegg
         )
+        private val recipe2 : RecipeModel = RecipeModel(
+            arrayListOf<IngredientModel>(ingredient1, ingredient2, ingredient3),
+            "Scrambled Eggs",
+            "1. Whisk eggs, and salt in small bowl. Melt butter in non-stick skillet over medium heat.\n" +
+                    "2. Pour in egg mixture and reduce heat to medium-low. As eggs begin to set, " +
+                    "gently move spatula across bottom and side of skillet to form large, soft curds.\n" +
+                    "3. Cook until eggs are thickened and no visible liquid egg remains, but the eggs are not dry.",
+            "The Cook",
+            R.drawable.scrambledegg
+        )
+
         private val user1: UserModel = UserModel("John", arrayListOf<RecipeModel>(recipe1))
         private val user2: UserModel = UserModel("Mary", arrayListOf<RecipeModel>(recipe1))
         fun generateRecipes() : ArrayList<RecipeModel>
@@ -29,6 +40,15 @@ class DataGenerator {
             users.add(user2)
 
             return users
+        }
+
+        fun generateFavDishes() : ArrayList<RecipeModel>
+        {
+            val dishes = ArrayList<RecipeModel>()
+            dishes.add(recipe1)
+            dishes.add(recipe2)
+
+            return dishes
         }
 
     }

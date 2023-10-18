@@ -24,7 +24,9 @@ class UsersFragment : Fragment() {
 
         //getting users
         val users = DataGenerator.generateUsers()
-
+        Log.d("TAG", "Generating Users")
+        Log.d("TAG", users.get(0).toString())
+        Log.d("TAG", users.get(1).toString())
         //assign users to ItemAdapter
         val itemAdapter = UserListAdapter(users)
 

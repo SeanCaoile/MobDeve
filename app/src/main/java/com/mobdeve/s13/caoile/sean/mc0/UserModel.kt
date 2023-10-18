@@ -5,4 +5,10 @@ class UserModel(username: String, favDishes: ArrayList<RecipeModel>) {
         private set
     var favDishes = favDishes
         private set
+
+    override fun toString(): String {
+        return "User{" +
+                "name='" + username
+                '}'
+    }
 }
