@@ -1,5 +1,7 @@
 package com.mobdeve.s13.caoile.sean.mc0;
 
+import java.io.Serializable
+
 class IngredientModel(name: String, quantity: Float, quantityType: String) {
     var name = name
         private set
