@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
-class UserListAdapter(private val data: ArrayList<UserModel>): RecyclerView.Adapter<UserListViewHolder>() {
+class UserListAdapter(private val data: ArrayList<UserModel>, val userListClickListener: UserListClickListener): RecyclerView.Adapter<UserListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListViewHolder {
         // Create a LayoutInflater using the parent's (i.e. RecyclerView's) context
@@ -22,6 +22,7 @@ class UserListAdapter(private val data: ArrayList<UserModel>): RecyclerView.Adap
         // many ways to implement the binding of data.
         holder.bindData(data.get(position))
 
+        val user = data.get(position)
         holder.setDeleteOnClickListener(View.OnClickListener {
             // Inform the user of the deleted element
             Toast.makeText(
@@ -35,6 +36,10 @@ class UserListAdapter(private val data: ArrayList<UserModel>): RecyclerView.Adap
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, itemCount)
         })
+
+        holder.itemView.setOnClickListener {
+            userListClickListener.onUserListItemClick(it, user, position)
+        }
     }
 
     override fun getItemCount(): Int {

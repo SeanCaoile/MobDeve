@@ -53,6 +53,5 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         intent.putExtra(RecipeActivity.INSTRUCTIONS_KEY, recipe.instructions)
         intent.putExtra(RecipeActivity.IMG_KEY, recipe.imageId)
         startActivity(intent)
-
     }
 }
