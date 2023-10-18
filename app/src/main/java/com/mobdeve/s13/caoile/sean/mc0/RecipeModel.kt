@@ -25,4 +25,6 @@ class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, i
                 ", image ='" + imageId +
                 '}'
     }
+
+
 }
