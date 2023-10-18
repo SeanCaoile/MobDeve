@@ -58,6 +58,5 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         intent.putExtra("extra", extra)
 
         startActivity(intent)
-
     }
 }

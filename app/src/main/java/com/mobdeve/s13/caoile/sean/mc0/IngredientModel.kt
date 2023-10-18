@@ -2,7 +2,7 @@ package com.mobdeve.s13.caoile.sean.mc0;
 
 import java.io.Serializable
 
-class IngredientModel(name: String, quantity: Float, quantityType: String) {
+class IngredientModel(name: String, quantity: Float, quantityType: String) : Serializable {
     var name = name
         private set
     var quantity = quantity
