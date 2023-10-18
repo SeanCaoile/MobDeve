@@ -53,9 +53,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         intent.putExtra(RecipeActivity.INSTRUCTIONS_KEY, recipe.instructions)
         intent.putExtra(RecipeActivity.IMG_KEY, recipe.imageId)
 
-        val extra = Bundle()
-        extra.putSerializable(RecipeActivity.INGREDIENTS_KEY, recipe.ingredients)
-        intent.putExtra("extra", extra)
+        intent.putExtra(RecipeActivity.INGREDIENTS_KEY, recipe.ingredients)
 
         startActivity(intent)
     }
