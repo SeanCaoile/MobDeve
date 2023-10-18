@@ -33,7 +33,7 @@ class RecipeListAdapter(private val data: ArrayList<RecipeModel>, val recipeList
         val recipe = data.get(position)
 
         holder.itemView.setOnClickListener {
-            recipeListClickListener.onRecipeListItemClick(it, recipe)
+            recipeListClickListener.onRecipeListItemClick(it, recipe, position)
         }
     }
 

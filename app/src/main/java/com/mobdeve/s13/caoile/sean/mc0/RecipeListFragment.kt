@@ -1,5 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 
 class RecipeListFragment : Fragment(), RecipeListClickListener {
     lateinit var listener: RecipeListClickListener
@@ -42,10 +44,15 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         recyclerView.adapter = itemAdapter
     }
 
-    override fun onRecipeListItemClick(view: View, recipe: RecipeModel) {
+    override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
         Toast.makeText(requireContext(), recipe.recipeName + "", Toast.LENGTH_SHORT).show()
 
-
+        val intent = Intent(activity, RecipeActivity::class.java)
+        intent.putExtra(RecipeActivity.NAME_KEY, recipe.recipeName)
+        intent.putExtra(RecipeActivity.CREATOR_KEY, recipe.creator)
+        intent.putExtra(RecipeActivity.INSTRUCTIONS_KEY, recipe.instructions)
+        intent.putExtra(RecipeActivity.IMG_KEY, recipe.imageId)
+        startActivity(intent)
 
     }
 }

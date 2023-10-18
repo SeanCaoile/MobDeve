@@ -4,5 +4,5 @@ import android.view.View
 
 interface RecipeListClickListener {
 
-    fun onRecipeListItemClick(view: View, recipe: RecipeModel)
+    fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int)
 }
