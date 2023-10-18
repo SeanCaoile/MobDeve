@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RecipeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recipe_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -115,22 +115,19 @@
                                 android:text="@string/sample"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-
-
-
-
-
                 </LinearLayout>
-
-
-
             </LinearLayout>
-
-
-
-
         </ScrollView>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="#FFD2A1"
+            android:src="@drawable/baseline_food_bank_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="24dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
