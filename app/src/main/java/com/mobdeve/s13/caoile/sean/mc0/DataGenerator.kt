@@ -5,6 +5,7 @@ class DataGenerator {
         private val ingredient1 : IngredientModel = IngredientModel("Egg", "1".toFloat(), "")
         private val ingredient2 : IngredientModel = IngredientModel("Salt", "100".toFloat(), "mg")
         private val ingredient3 : IngredientModel = IngredientModel("Butter", "3".toFloat(), "tbsp")
+        private val ingredient4 : IngredientModel = IngredientModel("Pepper", "150".toFloat(), "mg")
         private val recipe1 : RecipeModel = RecipeModel(
             arrayListOf<IngredientModel>(ingredient1, ingredient2, ingredient3),
             "Scrambled Eggs",
@@ -49,6 +50,15 @@ class DataGenerator {
             dishes.add(recipe2)
 
             return dishes
+        }
+
+        fun generateIngredients() : ArrayList<IngredientModel>
+        {
+            val ingredients = ArrayList<IngredientModel>()
+            ingredients.add(ingredient1)
+            ingredients.add(ingredient3)
+            ingredients.add(ingredient4)
+            return ingredients
         }
 
     }
