@@ -45,7 +45,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
-        Toast.makeText(requireContext(), recipe.recipeName + "", Toast.LENGTH_SHORT).show()
 
         val intent = Intent(activity, RecipeActivity::class.java)
         intent.putExtra(RecipeActivity.NAME_KEY, recipe.recipeName)

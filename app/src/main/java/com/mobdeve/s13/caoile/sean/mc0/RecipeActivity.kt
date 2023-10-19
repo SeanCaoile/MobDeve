@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -80,6 +81,7 @@ class RecipeActivity : AppCompatActivity()  {
     }
     private fun showBottomDialog(){
         val dialog = Dialog(this)
+        val overlay: FrameLayout = findViewById(R.id.overlay)
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.bottomsheet_layout)
@@ -88,12 +90,14 @@ class RecipeActivity : AppCompatActivity()  {
 
         cancelButton.setOnClickListener {
             dialog.dismiss()
+            overlay.visibility = View.GONE
         }
-
+        
         dialog.show()
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
         dialog.window?.setGravity(Gravity.BOTTOM)
+        overlay.visibility = View.VISIBLE
     }
 }
