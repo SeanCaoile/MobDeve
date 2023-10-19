@@ -10,12 +10,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/recipe_ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/lightYellow">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/yellow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -29,6 +31,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="16dp"
                 android:background="@null"
+                android:tint="@color/black"
                 android:src="@android:drawable/ic_menu_revert"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,13 +59,14 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="8dp">
 
                         <TextView
                             android:id="@+id/foodNameTv"
@@ -84,15 +88,18 @@
                         android:id="@+id/saveBtn"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginVertical="8dp"
                         android:text="Save Recipe" />
-
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="16dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -110,12 +117,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/lightYellow"
                             android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/sample" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/ingredientRV"
@@ -128,9 +131,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/instructions"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:layout_marginTop="8dp"/>
 
-                    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                    <androidx.cardview.widget.CardView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -140,6 +145,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/lightYellow"
                             android:orientation="vertical">
 
                             <TextView

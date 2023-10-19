@@ -17,13 +17,12 @@ class DataGenerator {
         )
         private val recipe2 : RecipeModel = RecipeModel(
             arrayListOf<IngredientModel>(ingredient1, ingredient2, ingredient3),
-            "Scrambled Eggs",
-            "1. Whisk eggs, and salt in small bowl. Melt butter in non-stick skillet over medium heat.\n" +
-                    "2. Pour in egg mixture and reduce heat to medium-low. As eggs begin to set, " +
-                    "gently move spatula across bottom and side of skillet to form large, soft curds.\n" +
-                    "3. Cook until eggs are thickened and no visible liquid egg remains, but the eggs are not dry.",
+            "Pizza",
+            "1. Knead and flour Dough . \n" +
+                    "2. Spread tomato paste around flattened dough. Add Cheese and toppings accordingly . \n" +
+                    "3. Bake pizza in oven for 10-20 minutes ",
             "The Cook",
-            R.drawable.scrambledegg
+            R.drawable.pizzafritta
         )
 
         private val user1: UserModel = UserModel("John", arrayListOf<RecipeModel>(recipe1))
