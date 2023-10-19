@@ -26,6 +26,7 @@
                 android:layout_height="50dp"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <!--Hard coded text for username for now as we will retrieve this from db later on-->
                 <TextView
                     android:id="@+id/username"
                     android:layout_width="300dp"
@@ -37,7 +38,7 @@
                 </TextView>
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/editBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Edit"
