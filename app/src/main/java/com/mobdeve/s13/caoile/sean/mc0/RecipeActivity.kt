@@ -63,15 +63,6 @@ class RecipeActivity : AppCompatActivity()  {
         }
 
         backBtn.setOnClickListener{
-            /*  TODO:
-             *      1. Declare a new Intent
-             *      2. Place the position into the Intent
-             *      3. Set the result as OK passing the intent
-             *      4. Properly finish the activity
-             *      NOTE: We're passing back the position as we need to know what to delete in
-             *            our data / ArrayList
-             * */
-
             finish()
         }
 
