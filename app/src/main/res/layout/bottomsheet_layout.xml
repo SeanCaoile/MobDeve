@@ -18,7 +18,7 @@
             android:id="@+id/IngredientHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ingredients"
+            android:text="Your Ingredients"
             android:textSize="30dp"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,13 +38,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="item1\nitem2\nitem3"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/IngredientHeader"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredientsListRv"

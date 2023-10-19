@@ -25,6 +25,7 @@ class RecipeActivity : AppCompatActivity()  {
         const val INGREDIENTS_KEY = "INGREDIENTS_KEY"
         const val INSTRUCTIONS_KEY = "INSTRUCTIONS_KEY"
         const val IMG_KEY = "IMG_KEY"
+        const val CUR_ING_KEY = "CUR_ING_KEY"
         const val POSITION_KEY = "POSITION_KEY"
     }
 
@@ -73,7 +74,9 @@ class RecipeActivity : AppCompatActivity()  {
     private fun showBottomDialog(){
         val dialog = Dialog(this)
         val overlay: FrameLayout = findViewById(R.id.overlay)
-
+        val curIngredients = DataGenerator.generateIngredients()
+        Log.d("TAG", "Adding in current Ingredients")
+        Log.d("TAG", curIngredients.get(0).toString())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.bottomsheet_layout)
 
@@ -83,6 +86,16 @@ class RecipeActivity : AppCompatActivity()  {
             dialog.dismiss()
             overlay.visibility = View.GONE
         }
+
+        Log.d("TAG", "Adding Ingredients to RV")
+        val recyclerView : RecyclerView = dialog.findViewById(R.id.ingredientsListRv)
+        val adapter = RecipeIngredientsAdapter(curIngredients)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+
+
         
         dialog.show()
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)

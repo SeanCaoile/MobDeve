@@ -46,6 +46,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
 
+
         val intent = Intent(activity, RecipeActivity::class.java)
         intent.putExtra(RecipeActivity.NAME_KEY, recipe.recipeName)
         intent.putExtra(RecipeActivity.CREATOR_KEY, recipe.creator)
