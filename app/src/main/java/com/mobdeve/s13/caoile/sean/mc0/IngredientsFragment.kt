@@ -33,7 +33,7 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
 //        Log.d("TAG", ingredients.get(0).toString())
 
         // Assign recipes to ItemAdapter
-        val itemAdapter = IngredientListAdapter(ingredients, listener)
+        val itemAdapter = IngredientListAdapterWithButton(ingredients, listener)
 
         // Set the LayoutManager that
         // this RecyclerView will use.
