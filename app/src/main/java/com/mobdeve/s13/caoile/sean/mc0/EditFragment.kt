@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -18,18 +17,14 @@ class EditFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_edit, container, false)
 
-        // Retrieve data passed from HomeFragment
         val data = arguments?.getString("key")
 
-        // Display the data in an EditText
         val editText: EditText = view.findViewById(R.id.usernameEdit)
         editText.setText(data)
 
         // Confirm button
         val confirmButton: Button = view.findViewById(R.id.confirmBtn)
         confirmButton.setOnClickListener {
-            // Perform actions to save or confirm the edits
-
             // Go back to the previous page (HomeFragment)
             goBackToHomeFragment()
         }

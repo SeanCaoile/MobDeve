@@ -1,27 +1,16 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.app.Activity
-import android.app.Dialog
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class UserActivity : AppCompatActivity (){
-
     companion object{
         const val USERNAME_KEY = "USERNAME_KEY"
         const val RECIPE_KEY = "RECIPE_KEY"
@@ -56,6 +45,5 @@ class UserActivity : AppCompatActivity (){
         backBtn.setOnClickListener(View.OnClickListener {
             finish()
         })
-
     }
 }

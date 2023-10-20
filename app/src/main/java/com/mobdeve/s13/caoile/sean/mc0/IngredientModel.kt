@@ -7,7 +7,6 @@ class IngredientModel(name: String, quantity: Float, quantityType: String) : Ser
         private set
     var quantity = quantity
         private set
-
     var quantityType = quantityType
         private set
 

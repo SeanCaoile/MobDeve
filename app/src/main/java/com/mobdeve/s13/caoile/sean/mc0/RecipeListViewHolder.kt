@@ -12,6 +12,5 @@ class RecipeListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     fun bindData(recipe: RecipeModel) {
         imageIV.setImageResource(recipe.imageId)
         nameTv.text = recipe.recipeName
-
     }
 }

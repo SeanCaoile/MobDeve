@@ -1,22 +1,12 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.SpannableStringBuilder
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 class IngredientEditActivity : AppCompatActivity(){
 
@@ -54,13 +44,7 @@ class IngredientEditActivity : AppCompatActivity(){
         })
 
         deleteBtn.setOnClickListener(View.OnClickListener {
-
-
-
             finish()
-
-
         })
-
     }
 }

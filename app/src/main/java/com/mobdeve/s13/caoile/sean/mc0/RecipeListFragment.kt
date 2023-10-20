@@ -6,11 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 
 class RecipeListFragment : Fragment(), RecipeListClickListener {
     lateinit var listener: RecipeListClickListener
@@ -19,7 +17,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         savedInstanceState: Bundle?
     ): View? {
         listener = this
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recipes, container, false)
     }
 
@@ -45,8 +42,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
-
-
         val intent = Intent(activity, RecipeActivity::class.java)
         intent.putExtra(RecipeActivity.NAME_KEY, recipe.recipeName)
         intent.putExtra(RecipeActivity.CREATOR_KEY, recipe.creator)

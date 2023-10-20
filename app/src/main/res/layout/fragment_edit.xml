@@ -26,6 +26,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="16dp"
                 android:background="@null"
+                app:tint="@color/black"
                 android:src="@android:drawable/ic_menu_revert"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

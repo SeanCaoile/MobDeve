@@ -6,30 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightYellow"
-    android:fitsSystemWindows="true"
-    tools:context=".HomePage"
-    tools:openDrawer="start">
+    android:fitsSystemWindows="true">
+<!--    tools:context=""-->
+<!--    tools:openDrawer="">-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/yellow"
-            app:titleTextColor="@color/black"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:background="@color/yellow"-->
+<!--            app:titleTextColor="@color/black"-->
+<!--            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+<!--            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+<!--        <FrameLayout-->
+<!--            android:id="@+id/fragment_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -54,7 +54,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <ImageButton
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
@@ -63,6 +62,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginStart="16dp"
                 android:background="@null"
+                app:tint="@color/black"
                 android:src="@android:drawable/ic_menu_revert"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,10 +89,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TestingTwentyLength1"
-                    android:textSize="20sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="MissingConstraints">
                 </TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Favorite Recipes:"
+                    android:layout_marginVertical="8dp"
+                    android:textSize="20sp"
+                    app:layout_constraintTop_toBottomOf="@id/username"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView

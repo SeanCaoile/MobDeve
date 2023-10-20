@@ -9,9 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -24,7 +21,6 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
         savedInstanceState: Bundle?
     ): View? {
         listener = this
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_ingredients, container, false)
     }
 
@@ -33,8 +29,8 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
 
         // getting the recipes
         val ingredients = DataGenerator.generateIngredients()
-        Log.d("TAG", "Generating Recipes")
-        Log.d("TAG", ingredients.get(0).toString())
+//        Log.d("TAG", "Generating Recipes")
+//        Log.d("TAG", ingredients.get(0).toString())
 
         // Assign recipes to ItemAdapter
         val itemAdapter = IngredientListAdapter(ingredients, listener)
@@ -56,10 +52,6 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
         })
     }
 
-
-
-
-
     override fun onIngredientsListItemClick(view: View, ingredient: IngredientModel, position: Int) {
         Toast.makeText(requireContext(), ingredient.name + "", Toast.LENGTH_SHORT).show()
 
@@ -67,7 +59,7 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
         intent.putExtra(IngredientEditActivity.NAME_KEY, ingredient.name)
         intent.putExtra(IngredientEditActivity.QUANTITY_KEY, ingredient.quantity.toString())
         intent.putExtra(IngredientEditActivity.TYPE_KEY, ingredient.quantityType)
-        Log.d("TAG", "Starting Ingredient Edit Activity")
+//        Log.d("TAG", "Starting Ingredient Edit Activity")
         startActivity(intent)
     }
 
