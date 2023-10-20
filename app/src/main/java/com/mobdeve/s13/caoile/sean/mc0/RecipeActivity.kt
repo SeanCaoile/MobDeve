@@ -87,6 +87,10 @@ class RecipeActivity : AppCompatActivity()  {
             overlay.visibility = View.GONE
         }
 
+        overlay.setOnClickListener{
+            overlay.visibility = View.GONE
+        }
+
         Log.d("TAG", "Adding Ingredients to RV")
         val recyclerView : RecyclerView = dialog.findViewById(R.id.ingredientsListRv)
         val adapter = RecipeIngredientsAdapter(curIngredients)
