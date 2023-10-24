@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "248606317346",
+    "project_id": "mobdeve-s13--seancaoile",
+    "storage_bucket": "mobdeve-s13--seancaoile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248606317346:android:cd3a2708be4cf28ac5237b",
+        "android_client_info": {
+          "package_name": "com.mobdeve.s13.caoile.sean.mc0"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248606317346-uislvcd0v5inhi0q7dticm3bquarg6j1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobdeve.s13.caoile.sean.mc0",
+            "certificate_hash": "76bb09e634e84b85eed8e534ca27858ed014cdf2"
+          }
+        },
+        {
+          "client_id": "248606317346-tsauaiup1mjdurhfls83pc2d7em796um.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgvRrtQcUzCAGw7XQcrypR1xNAjlbaanM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248606317346-tsauaiup1mjdurhfls83pc2d7em796um.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
