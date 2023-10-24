@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun signInGoogle() {
         val signInIntent= googleSignInClient.signInIntent
+//        val signInIntent = Intent(this,HomePage::class.java)
         launcher.launch(signInIntent)
     }
 
@@ -70,9 +71,6 @@ class MainActivity : AppCompatActivity() {
                 val intent : Intent = Intent(this, HomePage::class.java)
                 intent.putExtra("name", account.displayName)
                 startActivity(intent)
-                if (account!=null){
-                    updateUI(account)
-                }
             }else{
                 Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }

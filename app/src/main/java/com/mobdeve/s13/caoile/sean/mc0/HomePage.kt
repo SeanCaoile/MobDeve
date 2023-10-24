@@ -67,9 +67,9 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             }
             R.id.logout -> {
                 Toast.makeText(this,"Logout",Toast.LENGTH_SHORT).show()
-                auth.signOut()
+                FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this,MainActivity::class.java))
-//                finish()
+                finish()
             }
         }
 
