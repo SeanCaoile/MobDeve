@@ -12,7 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
@@ -68,6 +70,7 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             R.id.logout -> {
                 Toast.makeText(this,"Logout",Toast.LENGTH_SHORT).show()
                 FirebaseAuth.getInstance().signOut()
+                Firebase.auth.signOut()
                 startActivity(Intent(this,MainActivity::class.java))
                 finish()
             }
