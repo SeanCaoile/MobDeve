@@ -1,5 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +28,11 @@ class HomeFragment : Fragment() {
         val dishes = DataGenerator.generateFavDishes()
 
         val itemAdapter = HomeAdapter(dishes)
+
+        val currentUser: TextView = view.findViewById(R.id.username)
+        val sharedPrefs = requireContext().getSharedPreferences("AppPrefs",Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+        currentUser.text = currUser
 
         val recyclerView: RecyclerView = view.findViewById(R.id.favDishes)
         recyclerView.layoutManager = GridLayoutManager(context, 2)

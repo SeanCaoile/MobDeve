@@ -1,5 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,10 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         if (username != null) {
             Log.d("username", username)
             println(username)
+            val sharePref = getSharedPreferences("AppPrefs",Context.MODE_PRIVATE)
+            val editor = sharePref.edit()
+            editor.putString("username",username)
+            editor.apply()
         }
         else{ println("No name") }
 

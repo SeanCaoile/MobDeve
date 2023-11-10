@@ -1,5 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,11 +25,13 @@ class UsersFragment : Fragment(), UserListClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         //getting users
-        val users = DataGenerator.generateUsers()
-        Log.d("TAG", "Generating Users")
-        Log.d("TAG", users.get(0).toString())
-        Log.d("TAG", users.get(1).toString())
+        val users = DataGenerator.generateUsers(currUser)
+//        Log.d("TAG", "Generating Users")
+//        Log.d("TAG", users.get(0).toString())
+//        Log.d("TAG", users.get(1).toString())
         //assign users to ItemAdapter
         val itemAdapter = UserListAdapter(users, listener)
 

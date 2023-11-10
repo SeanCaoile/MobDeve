@@ -1,5 +1,12 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.ContentValues
+import android.util.Log
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
+import com.google.firebase.firestore.firestore
+
 class DataGenerator {
     companion object{
         private val ingredient1 : IngredientModel = IngredientModel("Egg", "1".toFloat(), "")
@@ -33,11 +40,29 @@ class DataGenerator {
             return arrayListOf<RecipeModel>(recipe1)
         }
 
-        fun generateUsers() : ArrayList<UserModel>
+        fun generateUsers(currentUser: String) : ArrayList<UserModel>
         {
+            val firestore = Firebase.firestore
             val users = ArrayList<UserModel>()
-            users.add(user1)
-            users.add(user2)
+//            users.add(user1)
+//            users.add(user2)
+            firestore.collection("users")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val username = document.getString("username")
+
+                        if (username != null && currentUser != username){
+//                            val recipes = document.get("favorites") as ArrayList<RecipeModel>
+                            val user: UserModel = UserModel(username, arrayListOf<RecipeModel>(
+                                recipe1))
+
+                            users.add(user)
+                        }
+                    }
+                } .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents",exception)
+                }
 
             return users
         }
