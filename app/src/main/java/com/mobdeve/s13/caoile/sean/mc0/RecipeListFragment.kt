@@ -27,19 +27,33 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
-        val recipes = DataGenerator.generateRecipes(currUser)
+//        val recipes = DataGenerator.generateRecipes(currUser)
+        DataGenerator.generateRecipes(currUser) {
+            val recipes = it
 
-        // Assign recipes to ItemAdapter
-        val itemAdapter = RecipeListAdapter(recipes, listener)
+            // Assign recipes to ItemAdapter
+            val itemAdapter = RecipeListAdapter(recipes, listener)
 
-        // Set the LayoutManager that
-        // this RecyclerView will use.
-        val recyclerView: RecyclerView = view.findViewById(R.id.recipeListRV)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+            // Set the LayoutManager that
+            // this RecyclerView will use.
+            val recyclerView: RecyclerView = view.findViewById(R.id.recipeListRV)
+            recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // adapter instance is set to the
-        // recyclerview to inflate the items.
-        recyclerView.adapter = itemAdapter
+            // adapter instance is set to the
+            // recyclerview to inflate the items.
+            recyclerView.adapter = itemAdapter
+        }
+//        // Assign recipes to ItemAdapter
+//        val itemAdapter = RecipeListAdapter(recipes, listener)
+//
+//        // Set the LayoutManager that
+//        // this RecyclerView will use.
+//        val recyclerView: RecyclerView = view.findViewById(R.id.recipeListRV)
+//        recyclerView.layoutManager = LinearLayoutManager(context)
+//
+//        // adapter instance is set to the
+//        // recyclerview to inflate the items.
+//        recyclerView.adapter = itemAdapter
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {

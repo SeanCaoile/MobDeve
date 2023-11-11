@@ -36,7 +36,7 @@ class DataGenerator {
 
         private val user1: UserModel = UserModel("John", arrayListOf<RecipeModel>(recipe1))
         private val user2: UserModel = UserModel("Mary", arrayListOf<RecipeModel>(recipe1))
-        fun generateRecipes(currentUser: String) : ArrayList<RecipeModel>
+        fun generateRecipes(currentUser: String, onResult: (ArrayList<RecipeModel>) -> (Unit)) : ArrayList<RecipeModel>
         {
             val firestore = Firebase.firestore
             val recipes = ArrayList<RecipeModel>()
@@ -71,7 +71,7 @@ class DataGenerator {
                     }
                 }
             }
-
+            onResult(recipes)
             return recipes
         }
 
