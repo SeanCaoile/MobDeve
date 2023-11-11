@@ -10,7 +10,7 @@ class RecipeListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val nameTv: TextView = itemView.findViewById(R.id.nameTv)
 
     fun bindData(recipe: RecipeModel) {
-        imageIV.setImageResource(recipe.imageId)
+        imageIV.setImageResource(recipe.imageURL)
         nameTv.text = recipe.recipeName
     }
 }

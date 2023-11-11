@@ -2,7 +2,7 @@ package com.mobdeve.s13.caoile.sean.mc0;
 
 import java.io.Serializable
 
-class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, instructions: String, creator: String, imageId : Int) : Serializable {
+class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, instructions: String, creator: String, imageURL : Int) : Serializable {
     var ingredients = ingredients
         private set
 
@@ -15,7 +15,7 @@ class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, i
     var creator = creator
         private set
 
-    var imageId = imageId
+    var imageURL = imageURL
         private set
 
     override fun toString(): String {
@@ -24,7 +24,7 @@ class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, i
                 ", name='" + recipeName +
                 ", instructions='" + instructions +
                 ", creator='" + creator +
-                ", image ='" + imageId +
+                ", image ='" + imageURL +
                 '}'
     }
 }

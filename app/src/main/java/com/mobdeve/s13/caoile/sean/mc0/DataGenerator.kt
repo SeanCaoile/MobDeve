@@ -3,7 +3,6 @@ package com.mobdeve.s13.caoile.sean.mc0
 import android.content.ContentValues
 import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.firestore
 
@@ -35,17 +34,49 @@ class DataGenerator {
 
         private val user1: UserModel = UserModel("John", arrayListOf<RecipeModel>(recipe1))
         private val user2: UserModel = UserModel("Mary", arrayListOf<RecipeModel>(recipe1))
-        fun generateRecipes() : ArrayList<RecipeModel>
+        fun generateRecipes(currentUser: String) : ArrayList<RecipeModel>
         {
-            return arrayListOf<RecipeModel>(recipe1)
+            val firestore = Firebase.firestore
+            val recipes = ArrayList<RecipeModel>()
+            val ingredients = ArrayList<IngredientModel>()
+            val recipesDb = firestore.collection("recipes")
+
+            recipesDb.get().addOnSuccessListener { result ->
+                for (document in result) {
+                    val creator = document.getString("creator").toString()
+                    if (creator != null && (creator == currentUser || creator == "The Guru")){
+                        val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
+
+                        //get each ingredient
+                        for (map in ingredientElement) {
+                            // Now you can access individual elements in the map
+                            val ingredientName = map["ingredient"].toString()
+                            val measurement = map["measurement"].toString()
+                            val quantity = (map["quantity"] as? String)?.toFloatOrNull() ?: 0.0f
+
+                            val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
+
+                            ingredients.add(ingredient)
+                        }
+
+                        val name = document.getString("name").toString()
+                        val instructions = document.getString("instructions").toString()
+                        val image = document.getString("imageURI").toString()
+
+                        val recipe = RecipeModel(ingredients,name,instructions,creator,R.drawable.scrambledegg)
+
+                        recipes.add(recipe)
+                    }
+                }
+            }
+
+            return recipes
         }
 
         fun generateUsers(currentUser: String) : ArrayList<UserModel>
         {
             val firestore = Firebase.firestore
             val users = ArrayList<UserModel>()
-//            users.add(user1)
-//            users.add(user2)
             firestore.collection("users")
                 .get()
                 .addOnSuccessListener { result ->

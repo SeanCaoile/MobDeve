@@ -1,5 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,10 +24,11 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
-        val recipes = DataGenerator.generateRecipes()
-        Log.d("TAG", "Generating Recipes")
-        Log.d("TAG", recipes.get(0).toString())
+        val recipes = DataGenerator.generateRecipes(currUser)
+        
 
         // Assign recipes to ItemAdapter
         val itemAdapter = RecipeListAdapter(recipes, listener)
@@ -46,7 +48,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         intent.putExtra(RecipeActivity.NAME_KEY, recipe.recipeName)
         intent.putExtra(RecipeActivity.CREATOR_KEY, recipe.creator)
         intent.putExtra(RecipeActivity.INSTRUCTIONS_KEY, recipe.instructions)
-        intent.putExtra(RecipeActivity.IMG_KEY, recipe.imageId)
+        intent.putExtra(RecipeActivity.IMG_KEY, recipe.imageURL)
 
         intent.putExtra(RecipeActivity.INGREDIENTS_KEY, recipe.ingredients)
 
