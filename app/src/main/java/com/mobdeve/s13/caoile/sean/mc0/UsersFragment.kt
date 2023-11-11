@@ -28,14 +28,16 @@ class UsersFragment : Fragment(), UserListClickListener {
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         //getting users
-        val users = DataGenerator.generateUsers(currUser)
-        //assign users to ItemAdapter
-        val itemAdapter = UserListAdapter(users, listener)
+        val users = DataGenerator.generateUsers(currUser){
+            val users = it
+            //assign users to ItemAdapter
+            val itemAdapter = UserListAdapter(users, listener)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.userList)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+            val recyclerView: RecyclerView = view.findViewById(R.id.userList)
+            recyclerView.layoutManager = LinearLayoutManager(context)
 
-        recyclerView.adapter = itemAdapter
+            recyclerView.adapter = itemAdapter
+        }
     }
 
     override fun onUserListItemClick(view: View, user: UserModel, position: Int) {

@@ -43,17 +43,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             // recyclerview to inflate the items.
             recyclerView.adapter = itemAdapter
         }
-//        // Assign recipes to ItemAdapter
-//        val itemAdapter = RecipeListAdapter(recipes, listener)
-//
-//        // Set the LayoutManager that
-//        // this RecyclerView will use.
-//        val recyclerView: RecyclerView = view.findViewById(R.id.recipeListRV)
-//        recyclerView.layoutManager = LinearLayoutManager(context)
-//
-//        // adapter instance is set to the
-//        // recyclerview to inflate the items.
-//        recyclerView.adapter = itemAdapter
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {

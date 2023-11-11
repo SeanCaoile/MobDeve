@@ -45,7 +45,7 @@ class DataGenerator {
 
             recipesDb.get().addOnSuccessListener { result ->
                 for (document in result) {
-                    val creator = document.getString("creator").toString()
+                    var creator = document.getString("creator").toString()
                     if (creator != null && (creator == currentUser || creator == "The Guru")){
                         val ingredients = ArrayList<IngredientModel>()
                         val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
@@ -55,14 +55,14 @@ class DataGenerator {
                             // Now you can access individual elements in the map
                             val ingredientName = map["ingredient"].toString()
                             val measurement = map["measurement"].toString()
-                            val quantity = (map["quantity"] as? String)?.toFloatOrNull() ?: 0.0f
-
+                            val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
                             val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
 
                             ingredients.add(ingredient)
                         }
-
+                        var addon = "by: "
                         val name = document.getString("name").toString()
+                        creator = addon.plus(creator)
                         val instructions = document.getString("instructions").toString()
                         val image = document.getString("imageURI").toString()
 
@@ -77,7 +77,7 @@ class DataGenerator {
             return recipes
         }
 
-        fun generateUsers(currentUser: String) : ArrayList<UserModel>
+        fun generateUsers(currentUser: String, onResult: (ArrayList<UserModel>) -> (Unit)) : ArrayList<UserModel>
         {
             val firestore = Firebase.firestore
             val users = ArrayList<UserModel>()
@@ -95,6 +95,7 @@ class DataGenerator {
                             users.add(user)
                         }
                     }
+                    onResult(users)
                 } .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents",exception)
                 }
