@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import at.favre.lib.crypto.bcrypt.BCrypt
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -34,38 +35,41 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPW = confirmPWEditText.text.toString()
 
             // Check if the username is not empty and password is valid
-            if (username.isNotEmpty() && password.length >= 5) {
-                // Check if passwords match
-                if (password == confirmPW) {
-                    // Check if the username already exists in Firebase Database
-                    Log.w("checking", "checking")
-                    database.collection("users")
-                        .document(username)
-                        .get()
-                        .addOnSuccessListener { document ->
-                            if (document.exists()) {
-                                // Username already exists, show an error message
-                                showToast("Username already exists")
-                            } else {
-                                // Username does not exist, proceed with the registration process
-                                // You can initiate the user registration here
+            if (username.isNotEmpty() || username == "The Guru") {
+                if (password.length >= 5) {
+                    if (password == confirmPW) {
+                        // Check if the username already exists in Firebase Database
+                        Log.w("checking", "checking")
+                        database.collection("users")
+                            .document(username)
+                            .get()
+                            .addOnSuccessListener { document ->
+                                if (document.exists()) {
+                                    // Username already exists, show an error message
+                                    usernameEditText.error = "Username already exists."
+                                } else {
+                                    // Username does not exist, proceed with the registration process
+                                    // You can initiate the user registration here
 
-                                // Call the function to register the user
-                                registerUser(username, password)
+                                    // Call the function to register the user
+                                    registerUser(username, password)
+                                }
                             }
-                        }
-                        .addOnFailureListener { exception ->
-                            // Handle any errors that may occur during the query
-                            Log.e("query_error", "Error querying the database: $exception")
-                        }
+                            .addOnFailureListener { exception ->
+                                // Handle any errors that may occur during the query
+                                Log.e("query_error", "Error querying the database: $exception")
+                            }
+                    } else {
+                        // Passwords do not match, show an error message
+                        confirmPWEditText.error = "The passwords do not match"
+                    }
                 } else {
-                    // Passwords do not match, show an error message
-                    showToast("Passwords do not match")
+                    passwordEditText.error = "The password must be at least 5 characters long."
                 }
             } else {
                 // Handle invalid input
                 // You can show an error message or toast here
-                showToast("Invalid input. Make sure username is not empty and password is at least 5 characters.")
+                usernameEditText.error = "This field is required"
             }
         }
     }
@@ -74,10 +78,13 @@ class RegisterActivity : AppCompatActivity() {
     }
     // Function to register the user
     private fun registerUser(username: String, password: String) {
+        // Hash the password using bcrypt
+        val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
+        Log.d("HashedPassword", "Hashed password: $hashedPassword")
         // Create the user in Firebase Firestore
         val user = hashMapOf(
             "username" to username,
-            "password" to password
+            "password" to hashedPassword
             // Add other user data as needed
         )
 
