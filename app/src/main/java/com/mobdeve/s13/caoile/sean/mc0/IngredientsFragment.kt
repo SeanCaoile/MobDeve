@@ -1,5 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,14 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class IngredientsFragment : Fragment(), IngredientsListListener {
     lateinit var listener: IngredientsListListener
     lateinit var newButton: Button
+    lateinit var ingredientsList: ArrayList<IngredientModel>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,14 +31,45 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val db = Firebase.firestore
+        ingredientsList = arrayListOf<IngredientModel>()
+
+        Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR USER INGREDIENTS")
+        db.collection("users")
+            .whereEqualTo("username", "Bob") //set to username later
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val dbIngredients = result.documents[0].data?.get("ingredient list") as ArrayList<Map<String, Any>>
+
+                    for(userIngredient in dbIngredients) {
+
+                        Log.d("TAG", userIngredient.toString())
+                        val name: String = userIngredient["ingredient"].toString()
+                        val measurement = userIngredient["measurement"].toString()
+                        val quantity = userIngredient["quantity"].toString()
+                        val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
+                        ingredientsList.add(newIngredient)
+                        Log.d("TAG", "Arraylist is now")
+                        Log.d("TAG", ingredientsList.toString())
+                    }
+
+
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(ContentValues.TAG, "Error getting documents.", exception)
+            }
+
 
         // getting the recipes
+        //val ingredients = DataGenerator.generateIngredients()
         val ingredients = DataGenerator.generateIngredients()
-//        Log.d("TAG", "Generating Recipes")
-//        Log.d("TAG", ingredients.get(0).toString())
+        Log.d("TAG", "Generating Recipes")
+        Log.d("TAG", ingredients.toString())
 
         // Assign recipes to ItemAdapter
-        val itemAdapter = IngredientListAdapterWithButton(ingredients, listener)
+        val itemAdapter = IngredientListAdapterWithButton(ingredientsList, listener)
 
         // Set the LayoutManager that
         // this RecyclerView will use.
@@ -53,12 +89,12 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
     }
 
     override fun onIngredientsListItemClick(view: View, ingredient: IngredientModel, position: Int) {
-        Toast.makeText(requireContext(), ingredient.name + "", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), ingredient.ingredient + "", Toast.LENGTH_SHORT).show()
 
         val intent = Intent(activity, IngredientEditActivity::class.java)
-        intent.putExtra(IngredientEditActivity.NAME_KEY, ingredient.name)
+        intent.putExtra(IngredientEditActivity.NAME_KEY, ingredient.ingredient)
         intent.putExtra(IngredientEditActivity.QUANTITY_KEY, ingredient.quantity.toString())
-        intent.putExtra(IngredientEditActivity.TYPE_KEY, ingredient.quantityType)
+        intent.putExtra(IngredientEditActivity.TYPE_KEY, ingredient.measurement)
 //        Log.d("TAG", "Starting Ingredient Edit Activity")
         startActivity(intent)
     }
