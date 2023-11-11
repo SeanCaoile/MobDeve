@@ -40,13 +40,14 @@ class DataGenerator {
         {
             val firestore = Firebase.firestore
             val recipes = ArrayList<RecipeModel>()
-            val ingredients = ArrayList<IngredientModel>()
+
             val recipesDb = firestore.collection("recipes")
 
             recipesDb.get().addOnSuccessListener { result ->
                 for (document in result) {
                     val creator = document.getString("creator").toString()
                     if (creator != null && (creator == currentUser || creator == "The Guru")){
+                        val ingredients = ArrayList<IngredientModel>()
                         val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
 
                         //get each ingredient
@@ -70,8 +71,9 @@ class DataGenerator {
                         recipes.add(recipe)
                     }
                 }
+                onResult(recipes)
             }
-            onResult(recipes)
+
             return recipes
         }
 
