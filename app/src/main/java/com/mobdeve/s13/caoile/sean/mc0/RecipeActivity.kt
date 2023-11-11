@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class RecipeActivity : AppCompatActivity()  {
@@ -50,7 +51,13 @@ class RecipeActivity : AppCompatActivity()  {
         foodNameTv.text = intent.getStringExtra(NAME_KEY)
         foodCreatorTv.text = intent.getStringExtra(CREATOR_KEY)
         instructionsTv.text = intent.getStringExtra(INSTRUCTIONS_KEY)
-        recipeImg.setImageResource(intent.getIntExtra(IMG_KEY, 0))
+
+//        recipeImg.setImageResource(intent.getIntExtra(IMG_KEY, 0))
+        Glide.with(this)
+            .load(intent.getStringExtra(IMG_KEY))
+            .into(recipeImg)
+
+
         val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
         Log.d("TAG", "Adding Ingredients")
         Log.d("TAG", ingredients?.get(0).toString())

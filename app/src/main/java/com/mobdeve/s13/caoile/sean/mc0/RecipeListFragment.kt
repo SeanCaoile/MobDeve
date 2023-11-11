@@ -28,7 +28,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
         val recipes = DataGenerator.generateRecipes(currUser)
-        
 
         // Assign recipes to ItemAdapter
         val itemAdapter = RecipeListAdapter(recipes, listener)

@@ -10,6 +10,6 @@ class HomeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val favDishIV : ImageView = itemView.findViewById(R.id.dishImg)
     fun bindData(favDish: RecipeModel){
         favDishTV.text = favDish.recipeName
-        favDishIV.setImageResource(favDish.imageURL)
+//        favDishIV.setImageResource(favDish.imageURL)
     }
 }

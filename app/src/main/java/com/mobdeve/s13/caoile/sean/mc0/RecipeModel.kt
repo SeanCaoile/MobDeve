@@ -2,7 +2,7 @@ package com.mobdeve.s13.caoile.sean.mc0;
 
 import java.io.Serializable
 
-class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, instructions: String, creator: String, imageURL : Int) : Serializable {
+class RecipeModel(ingredients: ArrayList<IngredientModel>, recipeName: String, instructions: String, creator: String, imageURL : String) : Serializable {
     var ingredients = ingredients
         private set
 

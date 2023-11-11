@@ -20,7 +20,8 @@ class DataGenerator {
                     "gently move spatula across bottom and side of skillet to form large, soft curds.\n" +
                     "3. Cook until eggs are thickened and no visible liquid egg remains, but the eggs are not dry.",
             "The Cook",
-            R.drawable.scrambledegg
+//            R.drawable.scrambledegg
+            "https://firebasestorage.googleapis.com/v0/b/mobdeve-s13--seancaoile.appspot.com/o/scrambledegg.png?alt=media&token=9280b7f7-eb0d-4570-93de-e51184cbcd12&_gl=1*8i2jt8*_ga*NTUxNzEzNDI5LjE2OTgwNjIzMzY.*_ga_CW55HF8NVT*MTY5OTMzOTYwNC4xNi4xLjE2OTkzNDE5OTAuNDIuMC4w"
         )
         private val recipe2 : RecipeModel = RecipeModel(
             arrayListOf<IngredientModel>(ingredient1, ingredient2, ingredient3),
@@ -29,7 +30,8 @@ class DataGenerator {
                     "2. Spread tomato paste around flattened dough. Add Cheese and toppings accordingly . \n" +
                     "3. Bake pizza in oven for 10-20 minutes ",
             "The Cook",
-            R.drawable.pizzafritta
+//            R.drawable.pizzafritta
+            "https://firebasestorage.googleapis.com/v0/b/mobdeve-s13--seancaoile.appspot.com/o/scrambledegg.png?alt=media&token=9280b7f7-eb0d-4570-93de-e51184cbcd12&_gl=1*8i2jt8*_ga*NTUxNzEzNDI5LjE2OTgwNjIzMzY.*_ga_CW55HF8NVT*MTY5OTMzOTYwNC4xNi4xLjE2OTkzNDE5OTAuNDIuMC4w"
         )
 
         private val user1: UserModel = UserModel("John", arrayListOf<RecipeModel>(recipe1))
@@ -63,7 +65,7 @@ class DataGenerator {
                         val instructions = document.getString("instructions").toString()
                         val image = document.getString("imageURI").toString()
 
-                        val recipe = RecipeModel(ingredients,name,instructions,creator,R.drawable.scrambledegg)
+                        val recipe = RecipeModel(ingredients,name,instructions,creator,image)
 
                         recipes.add(recipe)
                     }
