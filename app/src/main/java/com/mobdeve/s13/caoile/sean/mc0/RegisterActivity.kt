@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import at.favre.lib.crypto.bcrypt.BCrypt
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -81,8 +82,10 @@ class RegisterActivity : AppCompatActivity() {
         // Hash the password using bcrypt
         val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
         Log.d("HashedPassword", "Hashed password: $hashedPassword")
+        val userID = UUID.randomUUID().toString()
         // Create the user in Firebase Firestore
         val user = hashMapOf(
+            "userID" to userID,
             "username" to username,
             "password" to hashedPassword
             // Add other user data as needed
@@ -94,6 +97,7 @@ class RegisterActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // User registered successfully
                     // You can proceed to the next activity or perform other actions
+                    Log.w("userID", "userID $userID")
                     Log.w("regis", "Successful register")
                     finish()
                 } else {

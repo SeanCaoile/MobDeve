@@ -1,6 +1,8 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +33,7 @@ class EditFragment : Fragment() {
         val oldPassword: EditText = view.findViewById(R.id.oldpw)
         val newPassword: EditText = view.findViewById(R.id.newpw)
 
+
         // Confirm button
         val confirmButton: Button = view.findViewById(R.id.confirmBtn)
         confirmButton.setOnClickListener {
@@ -38,8 +41,7 @@ class EditFragment : Fragment() {
             val oldPassword = oldPassword.text.toString()
             val newPassword = newPassword.text.toString()
 
-            // Check if old password is correct before updating
-            checkUserOldPasswordAndUpdate(data.toString(), updatedUsername, oldPassword, newPassword)
+            fetchUserID(data.toString(), updatedUsername, oldPassword, newPassword)
         }
 
         // Back button
@@ -52,14 +54,40 @@ class EditFragment : Fragment() {
         return view
     }
 
+    private fun fetchUserID(
+        originalUsername: String,
+        updatedUsername: String,
+        oldPassword: String,
+        newPassword: String
+    ) {
+        // Fetch user data using the original username
+        usersRef.whereEqualTo("username", originalUsername)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    // User found, get the userID
+                    val userID = querySnapshot.documents[0].id
+                    Log.w("userID", "userID $userID")
+                    // Check if the old password is correct before updating
+                    checkUserOldPasswordAndUpdate(userID, updatedUsername, oldPassword, newPassword)
+                } else {
+                    // User not found, show an error message
+                    showToast("User not found")
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle any errors that may occur during the query
+                showToast("Error: ${exception.message}")
+            }
+    }
     private fun checkUserOldPasswordAndUpdate(
-        usernameOG: String,
+        userID: String,
         updatedUsername: String,
         oldPassword: String,
         newPassword: String
     ) {
         // Fetch user data using the updated username
-        usersRef.document(usernameOG)
+        usersRef.document(userID)
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -67,7 +95,7 @@ class EditFragment : Fragment() {
                     val storedPassword = document.getString("password") ?: ""
                     if (BCrypt.verifyer().verify(oldPassword.toCharArray(), storedPassword).verified) {
                         // Old password is correct, update the password
-                        updateUserData(usernameOG, updatedUsername, newPassword)
+                        updateUserData(userID, updatedUsername, newPassword)
                     } else {
                         // Old password is incorrect, show an error message
                         showToast("Incorrect old password")
@@ -83,18 +111,18 @@ class EditFragment : Fragment() {
             }
     }
 
-    private fun updateUserData(usernameOG: String, updatedUsername: String, newPassword: String) {
+    private fun updateUserData(userID: String, updatedUsername: String, newPassword: String) {
         // Hash the new password using bcrypt
         val hashedPassword = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray())
 
         // Update the user's password in the database
-        usersRef.document(usernameOG)
+        usersRef.document(userID)
             .update("username", updatedUsername, "password", hashedPassword)
             .addOnSuccessListener {
                 // Update successful, show a success message
                 showToast("User data updated successfully")
                 // Go back to the previous page (HomeFragment)
-                goBackToHomeFragment()
+                goBackToMainActivity()
             }
             .addOnFailureListener { exception ->
                 // Handle any errors that may occur during the update
@@ -106,6 +134,20 @@ class EditFragment : Fragment() {
         // Navigate back to the previous fragment (HomeFragment)
         val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
         fragmentManager.popBackStack()
+    }
+
+    private fun goBackToMainActivity() {
+        // Create an Intent to start MainActivity
+        val intent = Intent(requireContext(), MainActivity::class.java)
+
+        // Clear the back stack (remove all previous fragments)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        // Start MainActivity
+        startActivity(intent)
+
+        // Finish the current activity (EditFragment)
+        requireActivity().finish()
     }
 
     private fun showToast(message: String) {

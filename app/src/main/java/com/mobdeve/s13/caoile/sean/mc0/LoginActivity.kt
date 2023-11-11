@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -38,6 +39,13 @@ class LoginActivity : AppCompatActivity() {
                 usernameEditText.error = "This field is required."
                 passwordEditText.error = "This field is required."
             }
+        }
+
+        val backButton: ImageButton = findViewById(R.id.backBtn)
+        backButton.setOnClickListener {
+            // Go back to the previous page (HomeFragment) without saving changes
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
