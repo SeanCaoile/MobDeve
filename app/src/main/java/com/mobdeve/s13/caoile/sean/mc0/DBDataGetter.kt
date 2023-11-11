@@ -9,7 +9,9 @@ import com.google.firebase.firestore.ktx.firestore
 class DBDataGetter {
     companion object{
 
-        fun getIngredients() : ArrayList<IngredientModel>
+
+
+        fun getIngredients(onResult: (ArrayList<IngredientModel>) -> (Unit)) : ArrayList<IngredientModel>
         {
             val db = com.google.firebase.ktx.Firebase.firestore
             var ingredientsList: ArrayList<IngredientModel> = arrayListOf<IngredientModel>()
@@ -32,6 +34,7 @@ class DBDataGetter {
                             ingredientsList.add(newIngredient)
                             Log.d("TAG", "Arraylist is now")
                             Log.d("TAG", ingredientsList.toString())
+                            onResult(ingredientsList)
                         }
 
 
@@ -39,8 +42,10 @@ class DBDataGetter {
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents.", exception)
+
                 }
             return ingredientsList
+
         }
 
     }

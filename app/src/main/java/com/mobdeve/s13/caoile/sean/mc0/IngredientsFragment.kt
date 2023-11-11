@@ -33,59 +33,40 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
         super.onViewCreated(view, savedInstanceState)
         val db = Firebase.firestore
         ingredientsList = arrayListOf<IngredientModel>()
+        DBDataGetter.getIngredients() {
+            Log.d("TAG", "Getting Ingredients DB VER AAAAHHHHH")
+            ingredientsList = it
+            Log.d("TAG", ingredientsList.toString())
 
-        Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR USER INGREDIENTS")
-        db.collection("users")
-            .whereEqualTo("username", "Bob") //set to username later
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val dbIngredients = result.documents[0].data?.get("ingredient list") as ArrayList<Map<String, Any>>
+            // getting the recipes
+            //val ingredients = DataGenerator.generateIngredients()
+            val ingredients = DataGenerator.generateIngredients()
+            Log.d("TAG", "Generating Recipes")
+            Log.d("TAG", ingredients.toString())
 
-                    for(userIngredient in dbIngredients) {
+            // Assign recipes to ItemAdapter
+            val itemAdapter = IngredientListAdapterWithButton(ingredientsList, listener)
 
-                        Log.d("TAG", userIngredient.toString())
-                        val name: String = userIngredient["ingredient"].toString()
-                        val measurement = userIngredient["measurement"].toString()
-                        val quantity = userIngredient["quantity"].toString()
-                        val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
-                        ingredientsList.add(newIngredient)
-                        Log.d("TAG", "Arraylist is now")
-                        Log.d("TAG", ingredientsList.toString())
-                    }
+            // Set the LayoutManager that
+            // this RecyclerView will use.
+            val recyclerView: RecyclerView = view.findViewById(R.id.ingredientsListRv)
+            recyclerView.layoutManager = LinearLayoutManager(context)
+
+            // adapter instance is set to the
+            // recyclerview to inflate the items.
+            recyclerView.adapter = itemAdapter
+
+            newButton = activity?.findViewById<View>(R.id.addBtn) as Button
+            newButton.setOnClickListener(View.OnClickListener {
+                val intent = Intent(activity, IngredientNewActivity::class.java)
+
+                startActivity(intent)
+            })
+        }
 
 
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "Error getting documents.", exception)
-            }
 
 
-        // getting the recipes
-        //val ingredients = DataGenerator.generateIngredients()
-        val ingredients = DataGenerator.generateIngredients()
-        Log.d("TAG", "Generating Recipes")
-        Log.d("TAG", ingredients.toString())
-
-        // Assign recipes to ItemAdapter
-        val itemAdapter = IngredientListAdapterWithButton(ingredientsList, listener)
-
-        // Set the LayoutManager that
-        // this RecyclerView will use.
-        val recyclerView: RecyclerView = view.findViewById(R.id.ingredientsListRv)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-        // adapter instance is set to the
-        // recyclerview to inflate the items.
-        recyclerView.adapter = itemAdapter
-
-        newButton = activity?.findViewById<View>(R.id.addBtn) as Button
-        newButton.setOnClickListener(View.OnClickListener {
-            val intent = Intent(activity, IngredientNewActivity::class.java)
-
-            startActivity(intent)
-        })
     }
 
     override fun onIngredientsListItemClick(view: View, ingredient: IngredientModel, position: Int) {
