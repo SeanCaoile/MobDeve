@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import at.favre.lib.crypto.bcrypt.BCrypt
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,14 +34,22 @@ class LoginActivity : AppCompatActivity() {
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
                 // Check if the user exists in the Firestore collection
-                checkUserExistence(username, password)
+                checkUserExistence(username, password, usernameEditText, passwordEditText)
             } else {
-                Toast.makeText(this, "Please enter both username and password", Toast.LENGTH_SHORT).show()
+                usernameEditText.error = "This field is required."
+                passwordEditText.error = "This field is required."
             }
+        }
+
+        val backButton: ImageButton = findViewById(R.id.backBtn)
+        backButton.setOnClickListener {
+            // Go back to the previous page (HomeFragment) without saving changes
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    private fun checkUserExistence(username: String, password: String) {
+    private fun checkUserExistence(username: String, password: String, usernameEditText: EditText, passwordEditText: EditText) {
         val usersCollection = firestore.collection("users")
 
         usersCollection
@@ -50,7 +60,9 @@ class LoginActivity : AppCompatActivity() {
                     // User exists in the Firestore collection
                     // Now, you can check the password or perform authentication as needed
                     val storedPassword = querySnapshot.documents[0]["password"].toString()
-                    if (password == storedPassword) {
+
+                    // Use bcrypt to verify the entered password against the stored hashed password
+                    if (BCrypt.verifyer().verify(password.toCharArray(), storedPassword).verified) {
                         // Passwords match, login successful
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                         // Add your code to navigate to the next screen or perform other actions
@@ -58,10 +70,10 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("name", username)
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show()
+                        passwordEditText.error = "Incorrect password."
                     }
                 } else {
-                    Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
+                    usernameEditText.error = "User does not exist."
                 }
             }
             .addOnFailureListener { exception ->
