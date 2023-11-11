@@ -1,6 +1,8 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.content.ContentValues
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -11,14 +13,16 @@ class DBDataGetter {
 
 
 
-        fun getIngredients(onResult: (ArrayList<IngredientModel>) -> (Unit)) : ArrayList<IngredientModel>
+        fun getIngredients(user:String, onResult: (ArrayList<IngredientModel>) -> (Unit)) : ArrayList<IngredientModel>
         {
+
+
             val db = com.google.firebase.ktx.Firebase.firestore
             var ingredientsList: ArrayList<IngredientModel> = arrayListOf<IngredientModel>()
 
             Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR USER INGREDIENTS")
             db.collection("users")
-                .whereEqualTo("username", "Bob") //set to username later
+                .whereEqualTo("username", user.toString()) //set to username later
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {

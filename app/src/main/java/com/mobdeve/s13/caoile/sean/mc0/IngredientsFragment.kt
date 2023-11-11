@@ -1,6 +1,7 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -33,7 +34,13 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
         super.onViewCreated(view, savedInstanceState)
         val db = Firebase.firestore
         ingredientsList = arrayListOf<IngredientModel>()
-        DBDataGetter.getIngredients() {
+
+        val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+        Log.d("TAG", "CURRENT USER AAAAAAH")
+        Log.d("TAG", currUser)
+
+        DBDataGetter.getIngredients(currUser) {
             Log.d("TAG", "Getting Ingredients DB VER AAAAHHHHH")
             ingredientsList = it
             Log.d("TAG", ingredientsList.toString())
