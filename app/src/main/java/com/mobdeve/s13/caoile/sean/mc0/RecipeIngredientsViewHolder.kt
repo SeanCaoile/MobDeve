@@ -10,8 +10,8 @@ class RecipeIngredientsViewHolder(itemView: View): RecyclerView.ViewHolder(itemV
     private val quantityType: TextView = itemView.findViewById(R.id.quantityType)
 
     fun bindData(ingredient: IngredientModel) {
-        itemTv.text = ingredient.name
+        itemTv.text = ingredient.ingredient
         item_quantity.text = ingredient.quantity.toString()
-        quantityType.text = ingredient.quantityType
+        quantityType.text = ingredient.measurement
     }
 }
