@@ -49,6 +49,61 @@ class DBDataGetter {
 
         }
 
+        fun getFavorites(currentUser: String, onResult: (ArrayList<RecipeModel>) -> (Unit)) : ArrayList<RecipeModel>
+        {
+            val firestore = Firebase.firestore
+            val recipes = ArrayList<RecipeModel>()
+
+            this.getFavoriteStrings(currentUser) {
+                val recipesDb = firestore.collection("recipes")
+
+                var favStrings = it
+                Log.d("TAG", "Printing favStrings in getFavorites")
+                Log.d("TAG", favStrings.toString())
+                recipesDb.get().addOnSuccessListener { result ->
+                    for (document in result) {
+                        Log.d("TAG", "Printing current recipe ID")
+                        Log.d("TAG", document.id)
+                        if(favStrings.contains(document.id)) {
+                            Log.d("TAG", "Favorite Recipe Found " + document.id)
+
+                            var creator = document.getString("creator").toString()
+                            if (creator != null && (creator == currentUser || creator == "The Guru")){
+                                val ingredients = ArrayList<IngredientModel>()
+                                val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
+
+                                //get each ingredient
+                                for (map in ingredientElement) {
+                                    // Now you can access individual elements in the map
+                                    val ingredientName = map["ingredient"].toString()
+                                    val measurement = map["measurement"].toString()
+                                    val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
+                                    val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
+
+                                    ingredients.add(ingredient)
+                                }
+                                var addon = "by: "
+                                val name = document.getString("name").toString()
+                                creator = addon.plus(creator)
+                                val instructions = document.getString("instructions").toString()
+                                val image = document.getString("imageURI").toString()
+
+                                val recipe = RecipeModel(ingredients,name,instructions,creator,image)
+
+                                recipes.add(recipe)
+                                Log.d("TAG", "Added Rec list is now")
+                                Log.d("TAG", recipe.toString())
+                            }
+                        }
+
+                    }
+                    onResult(recipes)
+                }
+            }
+
+
+            return recipes
+        }
 
 
         fun getIngredients(user:String, onResult: (ArrayList<IngredientModel>) -> (Unit)) : ArrayList<IngredientModel>

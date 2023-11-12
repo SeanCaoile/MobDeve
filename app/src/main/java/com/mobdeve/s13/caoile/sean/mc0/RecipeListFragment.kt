@@ -43,8 +43,8 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             // adapter instance is set to the
             // recyclerview to inflate the items.
             recyclerView.adapter = itemAdapter
-            DBDataGetter.getFavoriteStrings(currUser) {
-                Log.d("TAG", currUser.toString())
+            DBDataGetter.getFavorites(currUser) {
+                Log.d("TAG", it.toString())
                 Log.d("TAG", "DONE GETTING FAVS")
             }
         }
