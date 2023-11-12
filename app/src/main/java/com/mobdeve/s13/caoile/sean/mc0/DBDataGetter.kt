@@ -12,6 +12,44 @@ class DBDataGetter {
     companion object{
 
 
+        fun getFavoriteStrings(user:String, onResult: (ArrayList<String>) -> (Unit)) : ArrayList<String>
+        {
+
+
+            val db = com.google.firebase.ktx.Firebase.firestore
+            var favIDList: ArrayList<String> = arrayListOf<String>()
+
+            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITES IN USER")
+            db.collection("users")
+                .whereEqualTo("username", user.toString()) //set to username later
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<String>
+
+                        for(fav in dbFavStr) {
+
+                            Log.d("TAG", fav.toString())
+                            val recipe: String = fav.toString()
+                            favIDList.add(recipe)
+                            Log.d("TAG", "Arraylist is now")
+                            Log.d("TAG", favIDList.toString())
+
+                        }
+
+
+                    }
+                    onResult(favIDList)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+
+                }
+            return favIDList
+
+        }
+
+
 
         fun getIngredients(user:String, onResult: (ArrayList<IngredientModel>) -> (Unit)) : ArrayList<IngredientModel>
         {
