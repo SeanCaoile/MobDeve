@@ -1,7 +1,8 @@
 <resources>
     <string name="ingredients">Ingredients</string>
-    <string name="ingredient">Ingredient: </string>
-    <string name="quantity">Quantity</string>
+    <string name="ingredient">Ingredient:&#160;&#160;</string>
+    <string name="quantity">Quantity:&#160;&#160;</string>
+    <string name="measurement">Measurement:&#160;&#160;</string>
     <string name="sample">Sample Text</string>
     <string name="instructions">Instructions</string>
     <string name="app_name">Gourmet Guru</string>

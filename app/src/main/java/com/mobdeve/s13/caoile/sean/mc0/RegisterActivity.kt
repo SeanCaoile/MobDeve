@@ -74,9 +74,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
+
     // Function to register the user
     private fun registerUser(username: String, password: String) {
         // Hash the password using bcrypt
@@ -99,12 +97,17 @@ class RegisterActivity : AppCompatActivity() {
                     // You can proceed to the next activity or perform other actions
                     Log.w("userID", "userID $userID")
                     Log.w("regis", "Successful register")
+                    showToast("Registration Successful")
                     finish()
                 } else {
                     // Registration failed
                     // You can show an error message or toast here
                     Log.w("failed", "failed register")
+                    showToast("Registration Failed")
                 }
             }
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

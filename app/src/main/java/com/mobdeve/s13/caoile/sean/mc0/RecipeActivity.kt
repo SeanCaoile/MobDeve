@@ -36,6 +36,7 @@ class RecipeActivity : AppCompatActivity()  {
     private lateinit var recipeImg: ImageView
     private lateinit var backBtn: ImageButton
     private lateinit var viewIngredBtn: FloatingActionButton
+    private lateinit var favBtn: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,16 +48,17 @@ class RecipeActivity : AppCompatActivity()  {
         recipeImg = findViewById<View>(R.id.recipeImg) as ImageView
         backBtn = findViewById<View>(R.id.backBtn) as ImageButton
         viewIngredBtn = findViewById<View>(R.id.floatingActionButton) as FloatingActionButton
+        favBtn = findViewById<View>(R.id.saveBtn) as ImageButton
 
         foodNameTv.text = intent.getStringExtra(NAME_KEY)
         foodCreatorTv.text = intent.getStringExtra(CREATOR_KEY)
         instructionsTv.text = intent.getStringExtra(INSTRUCTIONS_KEY)
 
-//        recipeImg.setImageResource(intent.getIntExtra(IMG_KEY, 0))
         Glide.with(this)
             .load(intent.getStringExtra(IMG_KEY))
             .into(recipeImg)
 
+        var favorited = false
 
         val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
         Log.d("TAG", "Adding Ingredients")
@@ -72,6 +74,15 @@ class RecipeActivity : AppCompatActivity()  {
 
         backBtn.setOnClickListener{
             finish()
+        }
+
+        favBtn.setOnClickListener {
+            if (favorited) {
+               favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+            } else {
+                favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+            }
+            favorited = !favorited
         }
 
         viewIngredBtn.setOnClickListener {
@@ -106,8 +117,6 @@ class RecipeActivity : AppCompatActivity()  {
         recyclerView.adapter = adapter
 
 
-
-        
         dialog.show()
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

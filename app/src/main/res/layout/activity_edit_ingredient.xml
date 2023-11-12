@@ -51,10 +51,12 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/ingredientET"
+        <TextView
+            android:id="@+id/ingredientName_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
             android:ems="10"
             android:inputType="textAutoCorrect" />
 
@@ -85,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number" />
+            android:inputType="numberDecimal" />
 
     </LinearLayout>
     <LinearLayout
@@ -104,7 +106,7 @@
             android:id="@+id/measurement_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Measurement Type"
+            android:text="@string/measurement"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -113,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="textAutoCorrect"
             />
 
     </LinearLayout>

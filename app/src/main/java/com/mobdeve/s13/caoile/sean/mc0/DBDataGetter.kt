@@ -10,13 +10,8 @@ import com.google.firebase.firestore.ktx.firestore
 
 class DBDataGetter {
     companion object{
-
-
-
         fun getIngredients(user:String, onResult: (ArrayList<IngredientModel>) -> (Unit)) : ArrayList<IngredientModel>
         {
-
-
             val db = com.google.firebase.ktx.Firebase.firestore
             var ingredientsList: ArrayList<IngredientModel> = arrayListOf<IngredientModel>()
 
@@ -26,22 +21,23 @@ class DBDataGetter {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        val dbIngredients = result.documents[0].data?.get("ingredient list") as ArrayList<Map<String, Any>>
+//                        if( result.documents[0].data?.get("ingredient list") != null){
+                        val dbIngredients = result.documents.getOrNull(0)?.data?.get("ingredient list") != null
+                        if (dbIngredients) {
+                            val dbIngredients = result.documents[0].data?.get("ingredient list") as ArrayList<Map<String, Any>>
 
-                        for(userIngredient in dbIngredients) {
-
-                            Log.d("TAG", userIngredient.toString())
-                            val name: String = userIngredient["ingredient"].toString()
-                            val measurement = userIngredient["measurement"].toString()
-                            val quantity = userIngredient["quantity"].toString()
-                            val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
-                            ingredientsList.add(newIngredient)
-                            Log.d("TAG", "Arraylist is now")
-                            Log.d("TAG", ingredientsList.toString())
-                            onResult(ingredientsList)
+                            for(userIngredient in dbIngredients) {
+//                                Log.d("TAG", userIngredient.toString())
+                                val name: String = userIngredient["ingredient"].toString()
+                                val measurement = userIngredient["measurement"].toString()
+                                val quantity = userIngredient["quantity"].toString()
+                                val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
+                                ingredientsList.add(newIngredient)
+//                                Log.d("TAG", "Arraylist is now")
+//                                Log.d("TAG", ingredientsList.toString())
+                                onResult(ingredientsList)
+                            }
                         }
-
-
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -49,8 +45,6 @@ class DBDataGetter {
 
                 }
             return ingredientsList
-
         }
-
     }
 }

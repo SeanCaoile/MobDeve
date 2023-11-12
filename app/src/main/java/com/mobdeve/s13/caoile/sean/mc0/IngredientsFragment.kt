@@ -21,7 +21,9 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
     lateinit var newButton: Button
     lateinit var ingredientsList: ArrayList<IngredientModel>
 
-
+    companion object{
+        const val INGREDIENTS_KEY = "INGREDIENTS_KEY"
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,23 +72,19 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
                 startActivity(intent)
             })
         }
-
-
-
-
     }
 
     override fun onIngredientsListItemClick(view: View, ingredient: IngredientModel, position: Int) {
-        Toast.makeText(requireContext(), ingredient.ingredient + "", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), ingredient.ingredient + "", Toast.LENGTH_SHORT).show()
 
         val intent = Intent(activity, IngredientEditActivity::class.java)
         intent.putExtra(IngredientEditActivity.NAME_KEY, ingredient.ingredient)
         intent.putExtra(IngredientEditActivity.QUANTITY_KEY, ingredient.quantity.toString())
         intent.putExtra(IngredientEditActivity.TYPE_KEY, ingredient.measurement)
 //        Log.d("TAG", "Starting Ingredient Edit Activity")
+//        intent.putExtra("callback", this as IngredientUpdateCallback)
+
+
         startActivity(intent)
     }
-
-
-
 }

@@ -120,6 +120,5 @@ class DataGenerator {
             ingredients.add(ingredient4)
             return ingredients
         }
-
     }
 }
