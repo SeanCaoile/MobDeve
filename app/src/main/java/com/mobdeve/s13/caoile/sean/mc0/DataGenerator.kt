@@ -8,10 +8,10 @@ import com.google.firebase.firestore.firestore
 
 class DataGenerator {
     companion object{
-        private val ingredient1 : IngredientModel = IngredientModel("Egg", "1".toFloat(), "", false)
-        private val ingredient2 : IngredientModel = IngredientModel("Salt", "100".toFloat(), "mg", false)
-        private val ingredient3 : IngredientModel = IngredientModel("Butter", "3".toFloat(), "tbsp", false)
-        private val ingredient4 : IngredientModel = IngredientModel("Pepper", "150".toFloat(), "mg", false)
+        private val ingredient1 : IngredientModel = IngredientModel("Egg", "1".toFloat(), "")
+        private val ingredient2 : IngredientModel = IngredientModel("Salt", "100".toFloat(), "mg")
+        private val ingredient3 : IngredientModel = IngredientModel("Butter", "3".toFloat(), "tbsp")
+        private val ingredient4 : IngredientModel = IngredientModel("Pepper", "150".toFloat(), "mg")
         private val recipe1 : RecipeModel = RecipeModel(
             arrayListOf<IngredientModel>(ingredient1, ingredient2, ingredient3),
             "Scrambled Eggs",
@@ -56,7 +56,7 @@ class DataGenerator {
                             val ingredientName = map["ingredient"].toString()
                             val measurement = map["measurement"].toString()
                             val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
-                            val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement, false)
+                            val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
 
                             ingredients.add(ingredient)
                         }

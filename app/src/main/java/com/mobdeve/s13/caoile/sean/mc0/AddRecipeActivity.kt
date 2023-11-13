@@ -1,55 +1,100 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class AddRecipeActivity : AppCompatActivity() {
 
-    private lateinit var ingredientsAdapter: IngredientsAdapter // Create a custom adapter
-    private lateinit var etNewIngredient: TextInputEditText
+    private lateinit var imgRecipe: ImageView
+    private lateinit var btnUploadImage: Button
+    private lateinit var etRecipeName: EditText
+    private lateinit var etInstructions: EditText
+    private lateinit var rvIngredients: RecyclerView
+    private lateinit var btnAddIngredient: Button
+    private lateinit var btnSaveRecipe: Button
+
+    private lateinit var database: DatabaseReference
+
+    private val ingredientsList = mutableListOf<IngredientModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_recipe)
 
-        // Initialize your RecyclerView and adapter
-        val rvIngredients: RecyclerView = findViewById(R.id.rvIngredients)
-        ingredientsAdapter = IngredientsAdapter()
-        rvIngredients.layoutManager = LinearLayoutManager(this)
-        rvIngredients.adapter = ingredientsAdapter
+        // Initialize Firebase
+        database = FirebaseDatabase.getInstance().reference
 
-        // Set up the click listener for the add ingredient button
-        val btnAddIngredient: Button = findViewById(R.id.btnAddIngredient)
-        btnAddIngredient.setOnClickListener {
-            addIngredient()
-        }
+        // Find views
+        imgRecipe = findViewById(R.id.imgRecipe)
+        btnUploadImage = findViewById(R.id.btnUploadImage)
+        etRecipeName = findViewById(R.id.etRecipeName)
+        etInstructions = findViewById(R.id.etInstructions)
+        rvIngredients = findViewById(R.id.rvIngredients)
+        btnAddIngredient = findViewById(R.id.btnAddIngredient)
+        btnSaveRecipe = findViewById(R.id.btnSaveRecipe)
 
-        // Set up the click listener for the save button
-        val btnSaveRecipe: Button = findViewById(R.id.btnSaveRecipe)
+        // Set click listener for btnSaveRecipe
         btnSaveRecipe.setOnClickListener {
-            saveRecipe()
+            saveRecipeToFirebase()
+        }
+
+        btnAddIngredient.setOnClickListener {
+            addIngredientRow()
         }
     }
 
-    private fun saveRecipe() {
-        // Your existing save recipe logic
+    private fun saveRecipeToFirebase() {
+        // Get values from UI elements
+        val recipeName = etRecipeName.text.toString()
+        val instructions = etInstructions.text.toString()
 
-        // You can get all the ingredient items from the adapter
-        val ingredientList = ingredientsAdapter.getIngredients()
+        // Create a Recipe object
+        val recipe = RecipeModel(recipeName, instructions, ingredientsList)
 
-        // Now you have the list of ingredients in the ingredientList variable
-        // You can use this list to save to Firebase or perform any other actions
+        // Get a unique key for the recipe
+        val recipeKey = database.child("recipes").push().key
+
+        // Save the recipe to the database
+        database.child("recipes").child(recipeKey!!).setValue(recipe)
+
+        // Finish the activity or navigate to another screen
+        finish()
     }
 
-    private fun addIngredient() {
-        val newIngredient = etNewIngredient.text.toString().trim()
-        if (newIngredient.isNotEmpty()) {
-            ingredientsAdapter.addIngredient(newIngredient)
-            etNewIngredient.text = null
-        }
+    private fun addIngredientRow() {
+        val layoutInflater = LayoutInflater.from(this)
+        val ingredientRowView = layoutInflater.inflate(R.layout.add_ingredient_item, null, false)
+
+        // Find views in the ingredientRowView
+        val etIngredientName = ingredientRowView.findViewById<EditText>(R.id.ingredientName)
+        val etQuantity = ingredientRowView.findViewById<EditText>(R.id.quantity)
+        val etMeasurement = ingredientRowView.findViewById<EditText>(R.id.measurement)
+
+        // Get values from the ingredientRowView
+        val ingredientName = etIngredientName.text.toString()
+        val quantity = etQuantity.text.toString()
+        val measurement = etMeasurement.text.toString()
+
+        // Create an IngredientModel object
+        val ingredient = IngredientModel(ingredientName, quantity, measurement)
+
+        // Add the ingredient to the list
+        ingredientsList.add(ingredient)
+
+        // TODO: Add logic to display the ingredientRowView in your layout
+        // Example: linearLayout.addView(ingredientRowView)
+
+        // Clear the input fields
+        etIngredientName.text.clear()
+        etQuantity.text.clear()
+        etMeasurement.text.clear()
     }
 }
