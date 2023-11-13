@@ -61,10 +61,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
                         Log.d("TAG", "DONE GETTING FAVS")
                         recyclerView.adapter = newItemAdapter
 
-
-
                         favFilter.setImageResource(R.drawable.staron)
-
                     }
                 }
                 else {

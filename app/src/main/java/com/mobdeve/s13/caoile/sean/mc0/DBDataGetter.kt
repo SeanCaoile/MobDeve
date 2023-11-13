@@ -14,8 +14,6 @@ class DBDataGetter {
 
         fun getFavoriteStrings(user:String, onResult: (ArrayList<String>) -> (Unit)) : ArrayList<String>
         {
-
-
             val db = com.google.firebase.ktx.Firebase.firestore
             var favIDList: ArrayList<String> = arrayListOf<String>()
 
