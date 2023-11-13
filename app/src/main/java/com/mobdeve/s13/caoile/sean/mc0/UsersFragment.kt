@@ -28,7 +28,7 @@ class UsersFragment : Fragment(), UserListClickListener {
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         //getting users
-        val users = DataGenerator.generateUsers(currUser){
+        DataGenerator.generateUsers(currUser){
             val users = it
             //assign users to ItemAdapter
             val itemAdapter = UserListAdapter(users, listener)
@@ -47,4 +47,8 @@ class UsersFragment : Fragment(), UserListClickListener {
         intent.putExtra(UserActivity.FAVDISH_KEY, user.favDishes)
         startActivity(intent)
     }
+
+
+
+    
 }
