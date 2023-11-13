@@ -15,7 +15,7 @@ class DBDataGetter {
             val db = com.google.firebase.ktx.Firebase.firestore
             var favIDList: ArrayList<String> = arrayListOf<String>()
 
-            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITES IN USER")
+//            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITES IN USER")
             db.collection("users")
                 .whereEqualTo("username", user.toString()) //set to username later
                 .get()
@@ -24,18 +24,17 @@ class DBDataGetter {
                         val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<String>
 
                         for(fav in dbFavStr) {
-                            Log.d("TAG", fav.toString())
-                            val recipe: String = fav.toString()
+//                            Log.d("TAG", fav.toString())
+                            val recipe: String = fav
                             favIDList.add(recipe)
-                            Log.d("TAG", "Arraylist is now")
-                            Log.d("TAG", favIDList.toString())
+//                            Log.d("TAG", "Arraylist is now")
+//                            Log.d("TAG", favIDList.toString())
                         }
                     }
                     onResult(favIDList)
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents.", exception)
-
                 }
             return favIDList
         }
@@ -49,14 +48,14 @@ class DBDataGetter {
                 val recipesDb = firestore.collection("recipes")
 
                 var favStrings = it
-                Log.d("TAG", "Printing favStrings in getFavorites")
-                Log.d("TAG", favStrings.toString())
+//                Log.d("TAG", "Printing favStrings in getFavorites")
+//                Log.d("TAG", favStrings.toString())
                 recipesDb.get().addOnSuccessListener { result ->
                     for (document in result) {
-                        Log.d("TAG", "Printing current recipe ID")
-                        Log.d("TAG", document.id)
+//                        Log.d("TAG", "Printing current recipe ID")
+//                        Log.d("TAG", document.id)
                         if(favStrings.contains(document.id)) {
-                            Log.d("TAG", "Favorite Recipe Found " + document.id)
+//                            Log.d("TAG", "Favorite Recipe Found " + document.id)
 
                             var creator = document.getString("creator").toString()
                             if (creator != null && (creator == currentUser || creator == "The Guru")){
@@ -82,8 +81,8 @@ class DBDataGetter {
                                 val recipe = RecipeModel(ingredients,name,instructions,creator,image)
 
                                 recipes.add(recipe)
-                                Log.d("TAG", "Added Rec list is now")
-                                Log.d("TAG", recipe.toString())
+//                                Log.d("TAG", "Added Rec list is now")
+//                                Log.d("TAG", recipe.toString())
                             }
                         }
                     }
@@ -98,7 +97,7 @@ class DBDataGetter {
             val db = com.google.firebase.ktx.Firebase.firestore
             var ingredientsList: ArrayList<IngredientModel> = arrayListOf<IngredientModel>()
 
-            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR USER INGREDIENTS")
+//            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR USER INGREDIENTS")
             db.collection("users")
                 .whereEqualTo("username", user)
                 .get()
@@ -113,7 +112,7 @@ class DBDataGetter {
                                 val measurement = userIngredient["measurement"].toString()
                                 val quantity = userIngredient["quantity"].toString()
                                 val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
-                                Log.d("NEWINGREDIENT","$newIngredient")
+//                                Log.d("NEWINGREDIENT","$newIngredient")
                                 ingredientsList.add(newIngredient)
                             }
                         }

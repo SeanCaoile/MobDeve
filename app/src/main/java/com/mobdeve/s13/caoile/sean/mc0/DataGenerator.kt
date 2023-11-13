@@ -98,7 +98,7 @@ class DataGenerator {
                 } .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents",exception)
                 }
-
+            
             return users
         }
 
