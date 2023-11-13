@@ -78,7 +78,8 @@ class DBDataGetter {
                                     val ingredientName = map["ingredient"].toString()
                                     val measurement = map["measurement"].toString()
                                     val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
-                                    val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
+                                    val isChecked = false
+                                    val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement, isChecked)
 
                                     ingredients.add(ingredient)
                                 }
@@ -127,7 +128,7 @@ class DBDataGetter {
                                 val name: String = userIngredient["ingredient"].toString()
                                 val measurement = userIngredient["measurement"].toString()
                                 val quantity = userIngredient["quantity"].toString()
-                                val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
+                                val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement, false)
                                 ingredientsList.add(newIngredient)
 //                                Log.d("TAG", "Arraylist is now")
 //                                Log.d("TAG", ingredientsList.toString())
