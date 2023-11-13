@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,15 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
 //        val recipes = DataGenerator.generateRecipes(currUser)
+        val btnAddRecipe = view.findViewById<Button>(R.id.btnAddRecipe)
+        btnAddRecipe.setOnClickListener {
+            val intent = Intent(requireContext(), AddRecipeActivity::class.java)
+
+            intent.putExtra("USERNAME_KEY", currUser)
+
+            startActivity(intent)
+        }
+
 
         DataGenerator.generateRecipes(currUser) {
             val recipes = it
