@@ -53,9 +53,13 @@ class IngredientEditActivity : AppCompatActivity(){
 
         deleteBtn.setOnClickListener(View.OnClickListener {
             val ingredientName = nameET.text.toString()
-            deleteIngredient(ingredientName)
-
-            finish()
+            deleteIngredient(ingredientName) { success ->
+                if (success) {
+                    finish()
+                } else {
+                    showToast("Failed to delete Ingredient")
+                }
+            }
         })
 
         confirmBtn.setOnClickListener(View.OnClickListener {
@@ -63,13 +67,17 @@ class IngredientEditActivity : AppCompatActivity(){
             val newQuantity = quantityET.text.toString().toFloat()
             val newMeasurement = measurementET.text.toString()
 
-            updateIngredient(ingredientName, newQuantity, newMeasurement)
-
-            finish()
+            updateIngredient(ingredientName, newQuantity, newMeasurement) { success ->
+                if (success) {
+                    finish()
+                } else {
+                    showToast("Failed to edit Ingredient")
+                }
+            }
         })
     }
 
-    private fun updateIngredient(ingredientName: String, newQuantity: Float, newMeasurement: String) {
+    private fun updateIngredient(ingredientName: String, newQuantity: Float, newMeasurement: String, callback: (Boolean) -> Unit) {
         // Update the user's password in the database
         val sharedPrefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
@@ -94,12 +102,14 @@ class IngredientEditActivity : AppCompatActivity(){
                         // Handle success, if needed
                         println("Array updated successfully")
                         showToast("${ingredientName} Ingredient Edited")
+                        callback(true)
                     }
                     .addOnFailureListener { e ->
                         // Handle failure
                         // Log or display an error message
                         println("Error updating array: $e")
                         showToast("Failed to Edit Ingredient")
+                        callback(false)
                     }
             }
         }
@@ -109,7 +119,7 @@ class IngredientEditActivity : AppCompatActivity(){
         }
     }
 
-    private fun deleteIngredient(ingredientName: String) {
+    private fun deleteIngredient(ingredientName: String, callback: (Boolean) -> Unit) {
         val sharedPrefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username", "DEFAULT").toString()
 
@@ -136,11 +146,13 @@ class IngredientEditActivity : AppCompatActivity(){
                             // Update successful
                             println("Array updated successfully")
                             showToast("${ingredientName} Ingredient Deleted")
+                            callback(true)
                         }
                         .addOnFailureListener { e ->
                             // Handle error
                             println("Error updating array: $e")
                             showToast("Failed to delete Ingredient")
+                            callback(false)
                         }
                 }
             }

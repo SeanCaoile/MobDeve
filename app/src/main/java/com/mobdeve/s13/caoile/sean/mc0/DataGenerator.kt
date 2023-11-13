@@ -73,7 +73,6 @@ class DataGenerator {
                 }
                 onResult(recipes)
             }
-
             return recipes
         }
 
@@ -115,9 +114,9 @@ class DataGenerator {
         fun generateIngredients() : ArrayList<IngredientModel>
         {
             val ingredients = ArrayList<IngredientModel>()
-            ingredients.add(ingredient1)
-            ingredients.add(ingredient3)
-            ingredients.add(ingredient4)
+//            ingredients.add(ingredient1)
+//            ingredients.add(ingredient3)
+//            ingredients.add(ingredient4)
             return ingredients
         }
     }

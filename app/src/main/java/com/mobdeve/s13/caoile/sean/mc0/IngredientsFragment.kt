@@ -47,12 +47,6 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
             ingredientsList = it
             Log.d("TAG", ingredientsList.toString())
 
-            // getting the recipes
-            //val ingredients = DataGenerator.generateIngredients()
-            val ingredients = DataGenerator.generateIngredients()
-            Log.d("TAG", "Generating Recipes")
-            Log.d("TAG", ingredients.toString())
-
             // Assign recipes to ItemAdapter
             val itemAdapter = IngredientListAdapterWithButton(ingredientsList, listener)
 
@@ -75,16 +69,39 @@ class IngredientsFragment : Fragment(), IngredientsListListener {
     }
 
     override fun onIngredientsListItemClick(view: View, ingredient: IngredientModel, position: Int) {
-//        Toast.makeText(requireContext(), ingredient.ingredient + "", Toast.LENGTH_SHORT).show()
-
         val intent = Intent(activity, IngredientEditActivity::class.java)
         intent.putExtra(IngredientEditActivity.NAME_KEY, ingredient.ingredient)
         intent.putExtra(IngredientEditActivity.QUANTITY_KEY, ingredient.quantity.toString())
         intent.putExtra(IngredientEditActivity.TYPE_KEY, ingredient.measurement)
-//        Log.d("TAG", "Starting Ingredient Edit Activity")
-//        intent.putExtra("callback", this as IngredientUpdateCallback)
-
 
         startActivity(intent)
+    }
+    override fun onResume() {
+        super.onResume()
+
+        activity?.runOnUiThread {
+            ingredientsList.clear()
+            Log.d("RESUME", "Fragment onResume")
+
+            val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+            val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+
+            DBDataGetter.getIngredients(currUser) {retrievedIngredientsList ->
+                ingredientsList = retrievedIngredientsList
+                Log.d("newLIST", "$ingredientsList")
+                // Assign recipes to ItemAdapter
+                val itemAdapter = IngredientListAdapterWithButton(ingredientsList, listener)
+
+                val recyclerView: RecyclerView = requireView().findViewById(R.id.ingredientsListRv)
+                recyclerView.layoutManager = LinearLayoutManager(context)
+
+                recyclerView.adapter = itemAdapter
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("PAUSE", "Fragment onPause")
     }
 }
