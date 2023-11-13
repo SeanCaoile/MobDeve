@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,14 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
                 Log.d("TAG", "DONE GETTING FAVS")
             }
         }
+
+        val addRecipeBtn = view.findViewById<Button>(R.id.btnAddRecipe)
+
+        addRecipeBtn.setOnClickListener(View.OnClickListener {
+            val intent = Intent(activity, AddRecipeActivity::class.java)
+
+            startActivity(intent)
+        })
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
