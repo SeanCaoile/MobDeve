@@ -2,6 +2,7 @@ package com.mobdeve.s13.caoile.sean.mc0
 
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -41,13 +42,17 @@ class IngredientNewActivity : AppCompatActivity(){
             val newQuantity = quantityET.text.toString().toFloat()
             val newMeasurement = measurementET.text.toString()
 
-            addIngredient(ingredientName, newQuantity, newMeasurement)
-
-            finish()
+            addIngredient(ingredientName, newQuantity, newMeasurement) { success ->
+                if (success) {
+                    finish()
+                } else {
+                    showToast("Failed to add Ingredient")
+                }
+            }
         })
     }
 
-    private fun addIngredient(ingredientName: String, quantity: Float, measurement: String) {
+    private fun addIngredient(ingredientName: String, quantity: Float, measurement: String, callback: (Boolean) -> Unit)  {
         val sharedPrefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
 
@@ -77,14 +82,18 @@ class IngredientNewActivity : AppCompatActivity(){
                         val newArray = ingredientsArray + newIngredient
                         usersRef.document(documentId).update("ingredient list", newArray)
                             .addOnSuccessListener {
-                                // Update successful
+                                // Update successfu l
                                 println("Array updated successfully")
                                 showToast("New ${ingredientName} Ingredient Added")
+
+                                callback(true)
                             }
                             .addOnFailureListener { e ->
                                 // Handle error
                                 println("Error updating array: $e")
                                 showToast("Failed to add Ingredient")
+
+                                callback(false)
                             }
                     }
                 }
