@@ -88,7 +88,7 @@ class DataGenerator {
 
                         if (username != null && currentUser != username){
 //                            val recipes = document.get("favorites") as ArrayList<RecipeModel>
-                            val user: UserModel = UserModel(username, arrayListOf<RecipeModel>(
+                            val user = UserModel(username, arrayListOf<RecipeModel>(
                                 recipe1))
 
                             users.add(user)
@@ -99,6 +99,35 @@ class DataGenerator {
                     Log.w(ContentValues.TAG, "Error getting documents",exception)
                 }
             
+            return users
+        }
+
+        fun searchUser(currentUser: String, searchUser: String, onResult: (ArrayList<UserModel>) -> (Unit)) : ArrayList<UserModel>
+        {
+            val firestore = Firebase.firestore
+            val users = ArrayList<UserModel>()
+            firestore.collection("users")
+                .whereGreaterThanOrEqualTo("username", searchUser)
+                .whereLessThanOrEqualTo("username", searchUser + "\uf8ff")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val username = document.getString("username")
+
+                        if (username != null && currentUser != username){
+//                            val recipes = document.get("favorites") as ArrayList<RecipeModel>
+                            val user = UserModel(username, arrayListOf<RecipeModel>(
+                                recipe1))
+
+                            users.add(user)
+                        }
+                    }
+                    Log.d("new searches","$users")
+                    onResult(users)
+                } .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents",exception)
+                }
+
             return users
         }
 
