@@ -28,6 +28,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
 //        val recipes = DataGenerator.generateRecipes(currUser)
+
         DataGenerator.generateRecipes(currUser) {
             val recipes = it
 
@@ -42,6 +43,10 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             // adapter instance is set to the
             // recyclerview to inflate the items.
             recyclerView.adapter = itemAdapter
+            DBDataGetter.getFavorites(currUser) {
+                Log.d("TAG", it.toString())
+                Log.d("TAG", "DONE GETTING FAVS")
+            }
         }
     }
 
