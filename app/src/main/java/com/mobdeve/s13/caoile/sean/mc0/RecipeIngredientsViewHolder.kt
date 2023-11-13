@@ -12,13 +12,10 @@ class RecipeIngredientsViewHolder(itemView: View): RecyclerView.ViewHolder(itemV
     private val quantityType: TextView = itemView.findViewById(R.id.quantityType)
 
     fun bindData(ingredient: IngredientModel) {
-        checkbox.isChecked = ingredient.isChecked
+        checkbox.isChecked = false
         itemTv.text = ingredient.ingredient
         item_quantity.text = ingredient.quantity.toString()
         quantityType.text = ingredient.measurement
 
-        checkbox.setOnCheckedChangeListener { _, isChecked ->
-            ingredient.isChecked = isChecked
-        }
     }
 }
