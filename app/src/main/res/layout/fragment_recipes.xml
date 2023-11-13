@@ -70,7 +70,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/btn_star" />
+                app:srcCompat="@drawable/staroff" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

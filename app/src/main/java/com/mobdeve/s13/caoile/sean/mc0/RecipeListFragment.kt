@@ -10,13 +10,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class RecipeListFragment : Fragment(), RecipeListClickListener {
     lateinit var listener: RecipeListClickListener
+    lateinit var favFilter: FloatingActionButton
+    private var fabOn: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         listener = this
         return inflater.inflate(R.layout.fragment_recipes, container, false)
     }
@@ -29,6 +34,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         // getting the recipes
 //        val recipes = DataGenerator.generateRecipes(currUser)
 
+        this.favFilter = requireView().findViewById(R.id.floatingActionButton)
         DataGenerator.generateRecipes(currUser) {
             val recipes = it
 
@@ -43,10 +49,31 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             // adapter instance is set to the
             // recyclerview to inflate the items.
             recyclerView.adapter = itemAdapter
-            DBDataGetter.getFavorites(currUser) {
-                Log.d("TAG", it.toString())
-                Log.d("TAG", "DONE GETTING FAVS")
-            }
+
+
+            favFilter.setOnClickListener(View.OnClickListener {
+                if(fabOn == false) {
+                    fabOn = true
+                    DBDataGetter.getFavorites(currUser) {
+                        val updatedRecipes = it
+                        val newItemAdapter = RecipeListAdapter(updatedRecipes, listener)
+                        Log.d("TAG", it.toString())
+                        Log.d("TAG", "DONE GETTING FAVS")
+                        recyclerView.adapter = newItemAdapter
+
+
+
+                        favFilter.setImageResource(R.drawable.staron)
+
+                    }
+                }
+                else {
+                    recyclerView.adapter = itemAdapter
+                    fabOn = false
+                    favFilter.setImageResource(R.drawable.staroff)
+                }
+
+            })
         }
     }
 
