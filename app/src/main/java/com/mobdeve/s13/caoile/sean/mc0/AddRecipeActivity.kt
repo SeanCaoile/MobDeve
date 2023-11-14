@@ -76,6 +76,13 @@
                 addRowDynamically()
             }
 
+            getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                uri?.let {
+                    imageUri = it
+                    imgRecipe.setImageURI(it) // Display the selected image in an ImageView (imgRecipe)
+                }
+            }
+
             btnUploadImage.setOnClickListener {
                 getContent.launch("image/*")
             }
