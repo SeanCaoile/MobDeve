@@ -18,17 +18,6 @@ class UserListAdapter(private val data: ArrayList<UserModel>, val userListClickL
         holder.bindData(data.get(position))
 
         val user = data.get(position)
-        holder.setDeleteOnClickListener(View.OnClickListener {
-            Toast.makeText(
-                holder.itemView.context,
-                "${data[position].username} has been unfollowed.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            data.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
-        })
 
         holder.itemView.setOnClickListener {
             userListClickListener.onUserListItemClick(it, user, position)

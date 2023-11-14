@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 
 class UsersFragment : Fragment(), UserListClickListener {
     lateinit var listener: UserListClickListener
@@ -28,16 +31,49 @@ class UsersFragment : Fragment(), UserListClickListener {
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         //getting users
-        val users = DataGenerator.generateUsers(currUser){
-            val users = it
-            //assign users to ItemAdapter
-            val itemAdapter = UserListAdapter(users, listener)
+        getUsers(currUser)
 
-            val recyclerView: RecyclerView = view.findViewById(R.id.userList)
-            recyclerView.layoutManager = LinearLayoutManager(context)
+        // Get reference to the ImageButton
+        val searchIcon: ImageButton = view.findViewById(R.id.searchIcon)
 
-            recyclerView.adapter = itemAdapter
+        // Set OnClickListener for the ImageButton
+        searchIcon.setOnClickListener {
+            // Get the username from the EditText
+            val etSearch: EditText = view.findViewById(R.id.etSearch)
+            val usernameToSearch = etSearch.text.toString().trim()
+
+            if (usernameToSearch.isNotEmpty()) {
+                // Search for the username in Firestore
+                searchUsernameInFirestore(currUser,usernameToSearch)
+            } else {
+                // Handle empty username
+                getUsers(currUser)
+            }
         }
+    }
+
+    private fun getUsers(currUser: String){
+        DataGenerator.generateUsers(currUser){
+            val users = it
+            setupView(users)
+        }
+    }
+    private fun searchUsernameInFirestore(currUser: String,username: String) {
+
+        DataGenerator.searchUser(currUser,username){
+            val users = it
+
+            setupView(users)
+        }
+    }
+
+    private fun setupView(users:ArrayList<UserModel>){
+        val itemAdapter = UserListAdapter(users, listener)
+
+        val recyclerView: RecyclerView = requireView().findViewById(R.id.userList)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        recyclerView.adapter = itemAdapter
     }
 
     override fun onUserListItemClick(view: View, user: UserModel, position: Int) {

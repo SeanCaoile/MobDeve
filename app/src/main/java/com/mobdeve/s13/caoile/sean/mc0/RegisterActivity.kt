@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import at.favre.lib.crypto.bcrypt.BCrypt
+import com.google.firebase.firestore.DocumentReference
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
@@ -36,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPW = confirmPWEditText.text.toString()
 
             // Check if the username is not empty and password is valid
-            if (username.isNotEmpty() || username == "The Guru") {
+            if (username.isNotEmpty() && username != "The Guru") {
                 if (password.length >= 5) {
                     if (password == confirmPW) {
                         // Check if the username already exists in Firebase Database
@@ -70,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 // Handle invalid input
                 // You can show an error message or toast here
-                usernameEditText.error = "This field is required"
+                usernameEditText.error = if (username.isNullOrEmpty()) "This field is required." else "\"The Guru\" is not a valid username"
             }
         }
     }
@@ -81,12 +82,15 @@ class RegisterActivity : AppCompatActivity() {
         val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
         Log.d("HashedPassword", "Hashed password: $hashedPassword")
         val userID = UUID.randomUUID().toString()
+        val favorites = listOf<DocumentReference>()
         // Create the user in Firebase Firestore
         val user = hashMapOf(
             "userID" to userID,
             "username" to username,
-            "password" to hashedPassword
+            "password" to hashedPassword,
             // Add other user data as needed
+            "favorites" to favorites
+
         )
 
         usersRef.document(username)
@@ -105,6 +109,8 @@ class RegisterActivity : AppCompatActivity() {
                     Log.w("failed", "failed register")
                     showToast("Registration Failed")
                 }
+
+
             }
     }
     private fun showToast(message: String) {

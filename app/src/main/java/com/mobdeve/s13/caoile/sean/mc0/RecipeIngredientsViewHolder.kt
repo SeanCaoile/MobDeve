@@ -6,13 +6,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class RecipeIngredientsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-    private val checkbox: CheckBox = itemView.findViewById(R.id.ingredientCheckbox)
+    private val checkbox: CheckBox? = itemView.findViewById(R.id.ingredientCheckbox)
     private val itemTv: TextView = itemView.findViewById(R.id.item_ingredient)
     private val item_quantity: TextView = itemView.findViewById(R.id.item_quantity)
     private val quantityType: TextView = itemView.findViewById(R.id.quantityType)
 
     fun bindData(ingredient: IngredientModel) {
-        checkbox.isChecked = false
+//        checkbox?.isChecked ?:  = false
+        checkbox?.isChecked = checkbox?.isChecked ?: false
+
         itemTv.text = ingredient.ingredient
         item_quantity.text = ingredient.quantity.toString()
         quantityType.text = ingredient.measurement

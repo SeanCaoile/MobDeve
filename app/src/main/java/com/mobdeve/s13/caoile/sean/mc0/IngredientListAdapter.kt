@@ -8,7 +8,7 @@ class IngredientListAdapter (private val data: ArrayList<IngredientModel>, val i
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.ingredients_item, parent, false)
+        val view = inflater.inflate(R.layout.ingredients_item_checkbox, parent, false)
         return IngredientsListViewHolder(view)
     }
 

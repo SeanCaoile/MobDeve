@@ -1,17 +1,15 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +26,7 @@ class RecipeActivity : AppCompatActivity()  {
         const val IMG_KEY = "IMG_KEY"
         const val CUR_ING_KEY = "CUR_ING_KEY"
         const val POSITION_KEY = "POSITION_KEY"
+        const val ID_KEY = "ID_KEY"
     }
 
     private lateinit var foodNameTv: TextView
@@ -38,9 +37,13 @@ class RecipeActivity : AppCompatActivity()  {
     private lateinit var viewIngredBtn: FloatingActionButton
     private lateinit var favBtn: ImageButton
 
+    private lateinit var popupWindow: PopupWindow
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe)
+        val sharedPrefs = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
 
         foodNameTv = findViewById<View>(R.id.foodNameTv) as TextView
         foodCreatorTv = findViewById<View>(R.id.food_creatorTv) as TextView
@@ -58,69 +61,111 @@ class RecipeActivity : AppCompatActivity()  {
             .load(intent.getStringExtra(IMG_KEY))
             .into(recipeImg)
 
+
         var favorited = false
 
-        val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
-        Log.d("TAG", "Adding Ingredients")
-        Log.d("TAG", ingredients?.get(0).toString())
-        if (ingredients != null){
+            //favorited = !favorited
+            DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+            {
+                DBDataGetter.checkIfFavorited(it, currUser) {
+                    if(it == true) {
+                        favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                        favorited = true
+                    }
+                    else {
+                        favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                        favorited = false
+                    }
+                }
+                val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
+                Log.d("TAG", "Adding Ingredients")
+                Log.d("TAG", ingredients?.get(0).toString())
+                if (ingredients != null){
 
-            val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
-            val adapter = RecipeIngredientsAdapter(ingredients)
+                    val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
+                    val adapter = RecipeIngredientsAdapter(true,ingredients)
 
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = adapter
-        }
+                    recyclerView.layoutManager = LinearLayoutManager(this)
+                    recyclerView.adapter = adapter
+                }
 
-        backBtn.setOnClickListener{
-            finish()
-        }
+                backBtn.setOnClickListener{
+                    finish()
+                }
 
-        favBtn.setOnClickListener {
-            if (favorited) {
-               favBtn.setImageResource(R.drawable.ic_like_on_foreground)
-            } else {
-                favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                favBtn.setOnClickListener {
+                    Log.w("Tag", "Current favorited status is " + favorited.toString())
+                    if (favorited == false) {
+                        favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                        Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                        DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                        {
+                            Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                            DBDataGetter.addFavoriteReference(it, currUser, false)
+                            favorited = !favorited
+                        }
+
+
+                    } else {
+                        favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                        Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                        DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                        {
+                            Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                            DBDataGetter.addFavoriteReference(it, currUser, true)
+                            favorited = !favorited
+                        }
+
+                    }
+
             }
-            favorited = !favorited
         }
 
         viewIngredBtn.setOnClickListener {
-            showBottomDialog()
+            showIngredientsPopup()
         }
     }
-    private fun showBottomDialog(){
-        val dialog = Dialog(this)
+    private fun showIngredientsPopup(){
         val overlay: FrameLayout = findViewById(R.id.overlay)
-        val curIngredients = DataGenerator.generateIngredients()
-        Log.d("TAG", "Adding in current Ingredients")
-        Log.d("TAG", curIngredients.get(0).toString())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.bottomsheet_layout)
+//        val curIngredients = DataGenerator.generateIngredients()
+        val sharedPrefs = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
 
-        val cancelButton: ImageView = dialog.findViewById(R.id.cancel_button)
 
-        cancelButton.setOnClickListener {
-            dialog.dismiss()
-            overlay.visibility = View.GONE
+        DBDataGetter.getIngredients(currUser){
+            var currIngredients = it
+
+            val popupView = layoutInflater.inflate(R.layout.bottomsheet_layout, null)
+            val recyclerView: RecyclerView = popupView.findViewById(R.id.ingredientsListRv)
+            val adapter = RecipeIngredientsAdapter(false,currIngredients)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapter
+
+            val cancelButton: ImageView = popupView.findViewById(R.id.cancel_button)
+
+            popupWindow = PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            popupWindow.animationStyle = R.style.DialogAnimation
+            popupWindow.isFocusable = true
+
+            popupWindow.setOnDismissListener {
+                overlay.visibility = View.GONE
+            }
+
+            overlay.visibility = View.VISIBLE
+            popupWindow.showAtLocation(popupView, Gravity.BOTTOM, 0, 0)
+
+            cancelButton.setOnClickListener {
+                popupWindow.dismiss()
+                overlay.visibility = View.GONE
+            }
+
+            popupWindow.setOnDismissListener {
+                overlay.visibility = View.GONE
+            }
         }
-
-        overlay.setOnClickListener{
-            overlay.visibility = View.GONE
-        }
-
-        Log.d("TAG", "Adding Ingredients to RV")
-        val recyclerView : RecyclerView = dialog.findViewById(R.id.ingredientsListRv)
-        val adapter = RecipeIngredientsAdapter(curIngredients)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
-
-        dialog.show()
-        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
-        dialog.window?.setGravity(Gravity.BOTTOM)
-        overlay.visibility = View.VISIBLE
     }
 }

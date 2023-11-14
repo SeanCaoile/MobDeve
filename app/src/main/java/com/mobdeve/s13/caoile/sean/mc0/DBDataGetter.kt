@@ -5,11 +5,102 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 
 class DBDataGetter {
     companion object{
+
+        fun addFavoriteReference(reference: DocumentReference, user: String, favorited: Boolean) {
+            val db = com.google.firebase.ktx.Firebase.firestore
+
+            db.collection("users")
+                .whereEqualTo("username", user.toString()) //set to username later
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        if(document != null) {
+                            var userRef: DocumentReference = document.reference
+                            if(favorited == false) {
+                                userRef.update("favorites", FieldValue.arrayUnion(reference))
+                                    .addOnSuccessListener {
+                                        Log.d("TAG", "Item added to array successfully!")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w("TAG", "Error adding item to array", e)
+                                    }
+                            }
+                            else {
+                                userRef.update("favorites", FieldValue.arrayRemove(reference))
+                                    .addOnSuccessListener {
+                                        Log.d("TAG", "Reference removed successfully!")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w("TAG", "Error removing reference", e)
+                                    }
+                            }
+
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                }
+
+
+        }
+
+        fun checkIfFavorited(recipeRef: DocumentReference, user: String, onResult: (Boolean) -> (Unit)) {
+            val db = com.google.firebase.ktx.Firebase.firestore
+            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITE STATUS")
+            db.collection("users")
+                .whereEqualTo("username", user.toString()) //set to username later
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        if(document != null) {
+                            val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<DocumentReference>
+                            if(dbFavStr.contains(recipeRef)) {
+                                onResult(true)
+                            }
+                            else {
+                                onResult(false)
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                }
+        }
+
+        fun getCurrentRecipeReference(recipeName: String, creator: String, onResult: (DocumentReference) -> (Unit)) {
+            val db = com.google.firebase.ktx.Firebase.firestore
+            Log.d("TAG", "finding current reference in DB " + creator + " " + recipeName)
+            db.collection("recipes")
+                .whereEqualTo("name", recipeName) //set to username later
+                //.whereEqualTo("creator" , creator)
+                .get()
+                .addOnSuccessListener { result ->
+                    Log.d("TAG" , "Looking at result " + result.toString())
+                    for (document in result) {
+                        Log.d("TAG" , "Looking at result " + document.toString())
+                        Log.d("T", "Comparing " + document.get("creator").toString() + " with " + creator)
+                        if(document.get("creator").toString() == creator)
+                            {
+                                Log.d("TAG" , "Found reference")
+                                val recipeReference = document.reference
+                                onResult(recipeReference)
+                            }
+
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                }
+        }
         fun getFavoriteStrings(user:String, onResult: (ArrayList<String>) -> (Unit)) : ArrayList<String>
         {
             val db = com.google.firebase.ktx.Firebase.firestore
@@ -21,15 +112,22 @@ class DBDataGetter {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<String>
+                        if(document != null) {
+                            val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<DocumentReference>
 
-                        for(fav in dbFavStr) {
-//                            Log.d("TAG", fav.toString())
-                            val recipe: String = fav
-                            favIDList.add(recipe)
-//                            Log.d("TAG", "Arraylist is now")
-//                            Log.d("TAG", favIDList.toString())
+                            for(fav in dbFavStr) {
+
+                                Log.d("TAG", fav.id)
+                                val recipe: String = fav.id
+                                favIDList.add(recipe)
+                                Log.d("TAG", "Arraylist is now")
+                                Log.d("TAG", favIDList.toString())
+
+                            }
                         }
+
+
+
                     }
                     onResult(favIDList)
                 }
