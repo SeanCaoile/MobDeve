@@ -64,59 +64,59 @@ class RecipeActivity : AppCompatActivity()  {
 
         var favorited = false
 
-            //favorited = !favorited
-            DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
-            {
-                DBDataGetter.checkIfFavorited(it, currUser) {
-                    if(it == true) {
-                        favBtn.setImageResource(R.drawable.ic_like_on_foreground)
-                        favorited = true
-                    }
-                    else {
-                        favBtn.setImageResource(R.drawable.ic_like_off_foreground)
-                        favorited = false
-                    }
+        //favorited = !favorited
+        DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+        {
+            DBDataGetter.checkIfFavorited(it, currUser) {
+                if(it == true) {
+                    favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                    favorited = true
                 }
-                val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
-                Log.d("TAG", "Adding Ingredients")
-                Log.d("TAG", ingredients?.get(0).toString())
-                if (ingredients != null){
-
-                    val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
-                    val adapter = RecipeIngredientsAdapter(true,ingredients)
-
-                    recyclerView.layoutManager = LinearLayoutManager(this)
-                    recyclerView.adapter = adapter
+                else {
+                    favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                    favorited = false
                 }
+            }
+            val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
+            Log.d("TAG", "Adding Ingredients")
+            Log.d("TAG", ingredients?.get(0).toString())
+            if (ingredients != null){
 
-                backBtn.setOnClickListener{
-                    finish()
-                }
+                val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
+                val adapter = RecipeIngredientsAdapter(true,ingredients)
 
-                favBtn.setOnClickListener {
-                    Log.w("Tag", "Current favorited status is " + favorited.toString())
-                    if (favorited == false) {
-                        favBtn.setImageResource(R.drawable.ic_like_on_foreground)
-                        Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
-                        DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
-                        {
-                            Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
-                            DBDataGetter.addFavoriteReference(it, currUser, false)
-                            favorited = !favorited
-                        }
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = adapter
+            }
 
+            backBtn.setOnClickListener{
+                finish()
+            }
 
-                    } else {
-                        favBtn.setImageResource(R.drawable.ic_like_off_foreground)
-                        Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
-                        DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
-                        {
-                            Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
-                            DBDataGetter.addFavoriteReference(it, currUser, true)
-                            favorited = !favorited
-                        }
-
+            favBtn.setOnClickListener {
+                Log.w("Tag", "Current favorited status is " + favorited.toString())
+                if (favorited == false) {
+                    favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                    Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                    DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                    {
+                        Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                        DBDataGetter.addFavoriteReference(it, currUser, false)
+                        favorited = !favorited
                     }
+
+
+                } else {
+                    favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                    Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                    DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                    {
+                        Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                        DBDataGetter.addFavoriteReference(it, currUser, true)
+                        favorited = !favorited
+                    }
+
+                }
 
             }
         }

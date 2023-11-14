@@ -46,7 +46,7 @@ class IngredientsAdapter : RecyclerView.Adapter<IngredientsAdapter.IngredientVie
         private val etIngredientName: EditText = itemView.findViewById(R.id.ingredientName)
         private val etQuantity: EditText = itemView.findViewById(R.id.quantity)
         private val etMeasurement: EditText = itemView.findViewById(R.id.measurement)
-        private val btnConfirm: Button = itemView.findViewById(R.id.btnConfirm)
+        private val btnConfirm: Button = itemView.findViewById(R.id.btnDelete)
         init {
             btnConfirm.setOnClickListener {
                 val ingredient = IngredientModel(
