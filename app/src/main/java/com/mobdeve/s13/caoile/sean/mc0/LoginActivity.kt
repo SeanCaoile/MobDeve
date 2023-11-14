@@ -36,8 +36,8 @@ class LoginActivity : AppCompatActivity() {
                 // Check if the user exists in the Firestore collection
                 checkUserExistence(username, password, usernameEditText, passwordEditText)
             } else {
-                usernameEditText.error = "This field is required."
-                passwordEditText.error = "This field is required."
+                username.takeIf { it.isNullOrEmpty() }?.let { usernameEditText.error = "This field is required." }
+                password.takeIf { it.isNullOrEmpty() }?.let { passwordEditText.error = "This field is required." }
             }
         }
 

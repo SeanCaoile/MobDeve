@@ -38,16 +38,23 @@ class IngredientNewActivity : AppCompatActivity(){
         })
 
         addBtn.setOnClickListener(View.OnClickListener {
+
             val ingredientName = nameET.text.toString()
-            val newQuantity = quantityET.text.toString().toFloat()
+            var newQuantity = quantityET.text.toString()
             val newMeasurement = measurementET.text.toString()
 
-            addIngredient(ingredientName, newQuantity, newMeasurement) { success ->
-                if (success) {
-                    finish()
-                } else {
-                    showToast("Failed to add Ingredient")
+            if (ingredientName.isNotEmpty() && newQuantity.isNotEmpty() && newMeasurement.isNotEmpty()) {
+                addIngredient(ingredientName, newQuantity.toFloat(), newMeasurement) { success ->
+                    if (success) {
+                        finish()
+                    } else {
+                        showToast("Failed to add Ingredient")
+                    }
                 }
+            } else{
+                ingredientName.takeIf { it.isNullOrEmpty() }?.let { nameET.error = "This field is required." }
+                newQuantity.takeIf { it.isNullOrEmpty() }?.let { quantityET.error = "This field is required." }
+                newMeasurement.takeIf { it.isNullOrEmpty() }?.let { measurementET.error = "This field is required." }
             }
         })
     }

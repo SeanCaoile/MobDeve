@@ -64,16 +64,22 @@ class IngredientEditActivity : AppCompatActivity(){
 
         confirmBtn.setOnClickListener(View.OnClickListener {
             val ingredientName = nameET.text.toString()
-            val newQuantity = quantityET.text.toString().toFloat()
+            val newQuantity = quantityET.text.toString()
             val newMeasurement = measurementET.text.toString()
 
-            updateIngredient(ingredientName, newQuantity, newMeasurement) { success ->
-                if (success) {
-                    finish()
-                } else {
-                    showToast("Failed to edit Ingredient")
+            if (ingredientName.isNotEmpty() && newQuantity.isNotEmpty() && newMeasurement.isNotEmpty()) {
+                updateIngredient(ingredientName, newQuantity.toFloat(), newMeasurement) { success ->
+                    if (success) {
+                        finish()
+                    } else {
+                        showToast("Failed to edit Ingredient")
+                    }
                 }
+            } else{
+                newQuantity.takeIf { it.isNullOrEmpty() }?.let { quantityET.error = "This field is required." }
+                newMeasurement.takeIf { it.isNullOrEmpty() }?.let { measurementET.error = "This field is required." }
             }
+
         })
     }
 
