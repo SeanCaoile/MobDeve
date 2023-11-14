@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 
@@ -21,15 +22,22 @@ class DBDataGetter {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<String>
+                        if(document != null) {
+                            val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<DocumentReference>
 
-                        for(fav in dbFavStr) {
-//                            Log.d("TAG", fav.toString())
-                            val recipe: String = fav
-                            favIDList.add(recipe)
-//                            Log.d("TAG", "Arraylist is now")
-//                            Log.d("TAG", favIDList.toString())
+                            for(fav in dbFavStr) {
+
+                                Log.d("TAG", fav.id)
+                                val recipe: String = fav.id
+                                favIDList.add(recipe)
+                                Log.d("TAG", "Arraylist is now")
+                                Log.d("TAG", favIDList.toString())
+
+                            }
                         }
+
+
+
                     }
                     onResult(favIDList)
                 }
