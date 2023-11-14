@@ -62,9 +62,7 @@ class RecipeActivity : AppCompatActivity()  {
             .into(recipeImg)
 
 
-
         var favorited = false
-
 
             //favorited = !favorited
             DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
