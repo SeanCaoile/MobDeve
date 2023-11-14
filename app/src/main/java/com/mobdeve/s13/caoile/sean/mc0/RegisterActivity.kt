@@ -36,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
             val confirmPW = confirmPWEditText.text.toString()
 
             // Check if the username is not empty and password is valid
-            if (username.isNotEmpty() || username == "The Guru") {
+            if (username.isNotEmpty() && username != "The Guru") {
                 if (password.length >= 5) {
                     if (password == confirmPW) {
                         // Check if the username already exists in Firebase Database
@@ -70,7 +70,7 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 // Handle invalid input
                 // You can show an error message or toast here
-                usernameEditText.error = "This field is required"
+                usernameEditText.error = if (username.isNullOrEmpty()) "This field is required." else "\"The Guru\" is not a valid username"
             }
         }
     }

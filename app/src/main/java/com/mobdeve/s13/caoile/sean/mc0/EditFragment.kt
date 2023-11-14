@@ -40,53 +40,49 @@ class EditFragment : Fragment() {
             val oldPassword = oldPasswordEt.text.toString()
             val newPassword = newPasswordEt.text.toString()
 
-//            if (username.isNotEmpty() || username == "The Guru") {
-//                if (password.length >= 5) {
-//                    if (password == confirmPW) {
-//                        // Check if the username already exists in Firebase Database
-//                        Log.w("checking", "checking")
-//                        database.collection("users")
-//                            .document(username)
-//                            .get()
-//                            .addOnSuccessListener { document ->
-//                                if (document.exists()) {
-//                                    // Username already exists, show an error message
-//                                    usernameEditText.error = "Username already exists."
-//                                } else {
-//                                    // Username does not exist, proceed with the registration process
-//                                    // You can initiate the user registration here
-//
-//                                    // Call the function to register the user
-//                                    registerUser(username, password)
-//                                }
-//                            }
-//                            .addOnFailureListener { exception ->
-//                                // Handle any errors that may occur during the query
-//                                Log.e("query_error", "Error querying the database: $exception")
-//                            }
-//                    } else {
-//                        // Passwords do not match, show an error message
-//                        confirmPWEditText.error = "The passwords do not match"
-//                    }
-//                } else {
-//                    passwordEditText.error = "The password must be at least 5 characters long."
-//                }
-//            } else {
-//                // Handle invalid input
-//                // You can show an error message or toast here
-//                usernameEditText.error = "This field is required"
-//            }
-
-
-            if (updatedUsername.isNotEmpty() && oldPassword.isNotEmpty() && newPassword.isNotEmpty()) {
-                fetchUserID(data.toString(), updatedUsername, oldPassword, newPassword)
-            } else{
-                updatedUsername.takeIf { it.isNullOrEmpty() }?.let { usernameTextEt.error = "This field is required." }
-                oldPassword.takeIf { it.isNullOrEmpty() }?.let { oldPasswordEt.error = "This field is required." }
-                newPassword.takeIf { it.isNullOrEmpty() }?.let { newPasswordEt.error = "This field is required." }
+            if (updatedUsername.isNotEmpty() && updatedUsername != "The Guru") {
+                if (newPassword.length >= 5) {
+                    // Check if the username already exists in Firebase Database
+                    Log.w("checking", "checking")
+                    database.collection("users")
+                        .document(updatedUsername)
+                        .get()
+                        .addOnSuccessListener { document ->
+                            if (document.exists()) {
+                                // Username already exists, show an error message
+                                usernameTextEt.error = "Username already exists."
+                            } else {
+                                // Username does not exist
+                                if (oldPassword.isNotEmpty() && newPassword.isNotEmpty()) {
+                                    fetchUserID(data.toString(), updatedUsername, oldPassword, newPassword)
+                                } else{
+                                    updatedUsername.takeIf { it.isNullOrEmpty() }?.let { usernameTextEt.error = "This field is required." }
+                                    oldPassword.takeIf { it.isNullOrEmpty() }?.let { oldPasswordEt.error = "This field is required." }
+                                    newPassword.takeIf { it.isNullOrEmpty() }?.let { newPasswordEt.error = "This field is required." }
+                                }
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle any errors that may occur during the query
+                            Log.e("query_error", "Error querying the database: $exception")
+                        }
+                } else {
+                    newPasswordEt.error = "The password must be at least 5 characters long."
+                }
+            } else {
+                // Handle invalid input
+                // You can show an error message or toast here
+                usernameTextEt.error = if (updatedUsername.isNullOrEmpty()) "This field is required." else "\"The Guru\" is not a valid username"
             }
 
-
+//
+//            if (updatedUsername.isNotEmpty() && oldPassword.isNotEmpty() && newPassword.isNotEmpty()) {
+//                fetchUserID(data.toString(), updatedUsername, oldPassword, newPassword)
+//            } else{
+//                updatedUsername.takeIf { it.isNullOrEmpty() }?.let { usernameTextEt.error = "This field is required." }
+//                oldPassword.takeIf { it.isNullOrEmpty() }?.let { oldPasswordEt.error = "This field is required." }
+//                newPassword.takeIf { it.isNullOrEmpty() }?.let { newPasswordEt.error = "This field is required." }
+//            }
         }
 
         // Back button
