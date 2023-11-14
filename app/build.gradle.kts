@@ -52,5 +52,6 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     implementation("at.favre.lib:bcrypt:0.9.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
 
 }
