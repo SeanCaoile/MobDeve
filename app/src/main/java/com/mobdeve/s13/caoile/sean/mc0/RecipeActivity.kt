@@ -26,6 +26,7 @@ class RecipeActivity : AppCompatActivity()  {
         const val IMG_KEY = "IMG_KEY"
         const val CUR_ING_KEY = "CUR_ING_KEY"
         const val POSITION_KEY = "POSITION_KEY"
+        const val ID_KEY = "ID_KEY"
     }
 
     private lateinit var foodNameTv: TextView
@@ -79,8 +80,16 @@ class RecipeActivity : AppCompatActivity()  {
         favBtn.setOnClickListener {
             if (favorited) {
                favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                {
+                    Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                    favorited = true
+                    DBDataGetter.addFavoriteReference(it, "Danp")
+                }
             } else {
                 favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                favorited = false
             }
             favorited = !favorited
         }
