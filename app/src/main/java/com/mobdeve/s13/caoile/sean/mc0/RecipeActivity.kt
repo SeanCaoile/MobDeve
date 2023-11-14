@@ -84,12 +84,20 @@ class RecipeActivity : AppCompatActivity()  {
                 DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
                 {
                     Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
-                    favorited = true
-                    DBDataGetter.addFavoriteReference(it, "Danp")
+                    DBDataGetter.addFavoriteReference(it, "Danp", false)
+
                 }
+
             } else {
                 favBtn.setImageResource(R.drawable.ic_like_off_foreground)
-                favorited = false
+                Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                {
+                    Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                    DBDataGetter.addFavoriteReference(it, "Danp", true)
+
+                }
+
             }
             favorited = !favorited
         }

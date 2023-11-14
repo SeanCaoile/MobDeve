@@ -12,7 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 
 class DBDataGetter {
     companion object{
-        fun addFavoriteReference(reference: DocumentReference, user: String) {
+        fun addFavoriteReference(reference: DocumentReference, user: String, favorited: Boolean) {
             val db = com.google.firebase.ktx.Firebase.firestore
 
             db.collection("users")
@@ -22,13 +22,25 @@ class DBDataGetter {
                     for (document in result) {
                         if(document != null) {
                             var userRef: DocumentReference = document.reference
-                            userRef.update("favorites", FieldValue.arrayUnion(reference))
-                                .addOnSuccessListener {
-                                    Log.d("TAG", "Item added to array successfully!")
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w("TAG", "Error adding item to array", e)
-                                }
+                            if(favorited == false) {
+                                userRef.update("favorites", FieldValue.arrayUnion(reference))
+                                    .addOnSuccessListener {
+                                        Log.d("TAG", "Item added to array successfully!")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w("TAG", "Error adding item to array", e)
+                                    }
+                            }
+                            else {
+                                userRef.update("favorites", FieldValue.arrayRemove(reference))
+                                    .addOnSuccessListener {
+                                        Log.d("TAG", "Reference removed successfully!")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w("TAG", "Error removing reference", e)
+                                    }
+                            }
+
                         }
                     }
                 }
@@ -38,6 +50,7 @@ class DBDataGetter {
 
 
         }
+
         fun getCurrentRecipeReference(recipeName: String, creator: String, onResult: (DocumentReference) -> (Unit)) {
             val db = com.google.firebase.ktx.Firebase.firestore
             Log.d("TAG", "finding current reference in DB " + creator + " " + recipeName)
