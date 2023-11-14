@@ -66,7 +66,7 @@ class RecipeActivity : AppCompatActivity()  {
         if (ingredients != null){
 
             val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
-            val adapter = RecipeIngredientsAdapter(ingredients)
+            val adapter = RecipeIngredientsAdapter(true,ingredients)
 
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = adapter
@@ -100,7 +100,7 @@ class RecipeActivity : AppCompatActivity()  {
 
             val popupView = layoutInflater.inflate(R.layout.bottomsheet_layout, null)
             val recyclerView: RecyclerView = popupView.findViewById(R.id.ingredientsListRv)
-            val adapter = RecipeIngredientsAdapter(currIngredients)
+            val adapter = RecipeIngredientsAdapter(false,currIngredients)
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = adapter
 
