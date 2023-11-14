@@ -51,6 +51,30 @@ class DBDataGetter {
 
         }
 
+        fun checkIfFavorited(recipeRef: DocumentReference, user: String, onResult: (Boolean) -> (Unit)) {
+            val db = com.google.firebase.ktx.Firebase.firestore
+            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITE STATUS")
+            db.collection("users")
+                .whereEqualTo("username", user.toString()) //set to username later
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        if(document != null) {
+                            val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<DocumentReference>
+                            if(dbFavStr.contains(recipeRef)) {
+                                onResult(true)
+                            }
+                            else {
+                                onResult(false)
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                }
+        }
+
         fun getCurrentRecipeReference(recipeName: String, creator: String, onResult: (DocumentReference) -> (Unit)) {
             val db = com.google.firebase.ktx.Firebase.firestore
             Log.d("TAG", "finding current reference in DB " + creator + " " + recipeName)
