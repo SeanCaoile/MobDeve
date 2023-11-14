@@ -17,6 +17,9 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
     lateinit var favFilter: FloatingActionButton
     private var fabOn: Boolean = false
 
+//    private val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+//    private val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,6 +75,40 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
 
             })
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+
+        this.favFilter = requireView().findViewById(R.id.floatingActionButton)
+        if(fabOn == true) {
+            DBDataGetter.getFavorites(currUser) {
+                val updatedRecipes = it
+
+                val newItemAdapter = RecipeListAdapter(updatedRecipes, listener)
+                val recyclerView: RecyclerView = requireView().findViewById(R.id.recipeListRV)
+                recyclerView.layoutManager = LinearLayoutManager(context)
+                recyclerView.adapter = newItemAdapter
+
+                favFilter.setImageResource(R.drawable.staron)
+            }
+        }
+        else {
+            DataGenerator.generateRecipes(currUser) {
+                val recipes = it
+                val itemAdapter = RecipeListAdapter(recipes, listener)
+                val recyclerView: RecyclerView = requireView().findViewById(R.id.recipeListRV)
+                recyclerView.layoutManager = LinearLayoutManager(context)
+                recyclerView.adapter = itemAdapter
+
+                fabOn = false
+                favFilter.setImageResource(R.drawable.staroff)
+            }
+        }
+
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
