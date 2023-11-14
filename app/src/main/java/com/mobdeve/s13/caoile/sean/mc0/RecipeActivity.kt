@@ -1,14 +1,11 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -89,45 +86,49 @@ class RecipeActivity : AppCompatActivity()  {
         }
 
         viewIngredBtn.setOnClickListener {
-            showBottomDialog()
+            showIngredientsPopup()
         }
     }
-    private fun showBottomDialog(){
-//        val dialog = Dialog(this)
+    private fun showIngredientsPopup(){
         val overlay: FrameLayout = findViewById(R.id.overlay)
 //        val curIngredients = DataGenerator.generateIngredients()
-//        Log.d("TAG", "Adding in current Ingredients")
-//        Log.d("TAG", curIngredients.get(0).toString())
-        val popupView = layoutInflater.inflate(R.layout.bottomsheet_layout, null)
-//        val recyclerView: RecyclerView = popupView.findViewById(R.id.ingredientsListRv)
-//        val adapter = RecipeIngredientsAdapter(curIngredients)
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        recyclerView.adapter = adapter
+        val sharedPrefs = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
 
-        val cancelButton: ImageView = popupView.findViewById(R.id.cancel_button)
+        DBDataGetter.getIngredients(currUser){
+            var currIngredients = it
 
-        popupWindow = PopupWindow(
-            popupView,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        popupWindow.animationStyle = R.style.DialogAnimation
-        popupWindow.isFocusable = true
+            val popupView = layoutInflater.inflate(R.layout.bottomsheet_layout, null)
+            val recyclerView: RecyclerView = popupView.findViewById(R.id.ingredientsListRv)
+            val adapter = RecipeIngredientsAdapter(currIngredients)
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = adapter
 
-        popupWindow.setOnDismissListener {
-            overlay.visibility = View.GONE
-        }
+            val cancelButton: ImageView = popupView.findViewById(R.id.cancel_button)
 
-        overlay.visibility = View.VISIBLE
-        popupWindow.showAtLocation(popupView, Gravity.BOTTOM, 0, 0)
+            popupWindow = PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+            popupWindow.animationStyle = R.style.DialogAnimation
+            popupWindow.isFocusable = true
 
-        cancelButton.setOnClickListener {
-            popupWindow.dismiss()
-            overlay.visibility = View.GONE
-        }
+            popupWindow.setOnDismissListener {
+                overlay.visibility = View.GONE
+            }
 
-        popupWindow.setOnDismissListener {
-            overlay.visibility = View.GONE
+            overlay.visibility = View.VISIBLE
+            popupWindow.showAtLocation(popupView, Gravity.BOTTOM, 0, 0)
+
+            cancelButton.setOnClickListener {
+                popupWindow.dismiss()
+                overlay.visibility = View.GONE
+            }
+
+            popupWindow.setOnDismissListener {
+                overlay.visibility = View.GONE
+            }
         }
     }
 }
