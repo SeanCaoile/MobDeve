@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 
 class DBDataGetter {
     companion object{
+
         fun addFavoriteReference(reference: DocumentReference, user: String, favorited: Boolean) {
             val db = com.google.firebase.ktx.Firebase.firestore
 
