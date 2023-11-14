@@ -76,6 +76,50 @@ class DataGenerator {
             return recipes
         }
 
+        fun searchRecipe(searchRecipe: String,currentUser: String, onResult: (ArrayList<RecipeModel>) -> (Unit)) : ArrayList<RecipeModel>
+        {
+            val firestore = Firebase.firestore
+            val recipes = ArrayList<RecipeModel>()
+
+            val recipesDb = firestore.collection("recipes")
+
+            recipesDb.get().addOnSuccessListener { result ->
+                for (document in result) {
+                    var creator = document.getString("creator").toString()
+                    if (creator != null && (creator == currentUser || creator == "The Guru")){
+                        val ingredients = ArrayList<IngredientModel>()
+                        val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
+
+                        val name = document.getString("name").toString()
+
+                        //search function
+                        if (name.contains(searchRecipe, ignoreCase = true)){
+                            //get each ingredient
+                            for (map in ingredientElement) {
+                                // Now you can access individual elements in the map
+                                val ingredientName = map["ingredient"].toString()
+                                val measurement = map["measurement"].toString()
+                                val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
+                                val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
+
+                                ingredients.add(ingredient)
+                            }
+                            var addon = "by: "
+                            creator = addon.plus(creator)
+                            val instructions = document.getString("instructions").toString()
+                            val image = document.getString("imageURI").toString()
+
+                            val recipe = RecipeModel(ingredients,name,instructions,creator,image)
+
+                            recipes.add(recipe)
+                        }
+                    }
+                }
+                onResult(recipes)
+            }
+            return recipes
+        }
+
         fun generateUsers(currentUser: String, onResult: (ArrayList<UserModel>) -> (Unit)) : ArrayList<UserModel>
         {
             val firestore = Firebase.firestore
@@ -98,7 +142,7 @@ class DataGenerator {
                 } .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents",exception)
                 }
-            
+
             return users
         }
 

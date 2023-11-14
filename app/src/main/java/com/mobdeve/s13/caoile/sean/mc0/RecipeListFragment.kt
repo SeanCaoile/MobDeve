@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,8 +37,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
-//        val recipes = DataGenerator.generateRecipes(currUser)
-
+        val searchIcon: ImageButton = view.findViewById(R.id.searchIcon)
         this.favFilter = requireView().findViewById(R.id.floatingActionButton)
         DataGenerator.generateRecipes(currUser) {
             val recipes = it
@@ -75,10 +76,27 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
 
             })
         }
+
+        searchIcon.setOnClickListener {
+            val etSearch: EditText = view.findViewById(R.id.etSearch)
+            val recipeToSearch = etSearch.text.toString().trim()
+
+            if (recipeToSearch.isNotEmpty()) {
+                // Search for the username in Firestore
+                searchRecipeInFirestore(currUser,recipeToSearch)
+            } else {
+                // Handle empty username
+                getRecipes(currUser)
+                fabOn = false
+                favFilter.setImageResource(R.drawable.staroff)
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        val etSearch: EditText = requireView().findViewById(R.id.etSearch)
+        etSearch.setText("")
 
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
@@ -109,6 +127,30 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             }
         }
 
+    }
+
+    private fun getRecipes(currUser: String){
+        DataGenerator.generateRecipes(currUser){
+            val recipes = it
+            setupView(recipes)
+        }
+    }
+    private fun searchRecipeInFirestore(searchRecipe: String, currUser: String) {
+
+        DataGenerator.searchRecipe(currUser,currUser){
+            val recipes = it
+
+            setupView(recipes)
+        }
+    }
+
+    private fun setupView(recipes:ArrayList<RecipeModel>){
+        val itemAdapter = RecipeListAdapter(recipes, listener)
+
+        val recyclerView: RecyclerView = requireView().findViewById(R.id.recipeListRV)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        recyclerView.adapter = itemAdapter
     }
 
     override fun onRecipeListItemClick(view: View, recipe: RecipeModel, position: Int) {
