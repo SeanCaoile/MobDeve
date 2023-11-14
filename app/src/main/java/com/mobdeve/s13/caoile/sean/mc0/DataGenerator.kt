@@ -91,7 +91,8 @@ class DataGenerator {
                         val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
 
                         val name = document.getString("name").toString()
-
+                        Log.d("STRING CHECK",name)
+                        Log.d("STRING CHECK",searchRecipe)
                         //search function
                         if (name.contains(searchRecipe, ignoreCase = true)){
                             //get each ingredient

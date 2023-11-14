@@ -83,7 +83,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
 
             if (recipeToSearch.isNotEmpty()) {
                 // Search for the username in Firestore
-                searchRecipeInFirestore(currUser,recipeToSearch)
+                searchRecipeInFirestore(recipeToSearch,currUser)
             } else {
                 // Handle empty username
                 getRecipes(currUser)
@@ -137,7 +137,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
     }
     private fun searchRecipeInFirestore(searchRecipe: String, currUser: String) {
 
-        DataGenerator.searchRecipe(currUser,currUser){
+        DataGenerator.searchRecipe(searchRecipe,currUser){
             val recipes = it
 
             setupView(recipes)

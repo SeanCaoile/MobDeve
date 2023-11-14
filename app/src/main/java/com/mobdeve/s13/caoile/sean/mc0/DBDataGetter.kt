@@ -116,18 +116,13 @@ class DBDataGetter {
                             val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<DocumentReference>
 
                             for(fav in dbFavStr) {
-
                                 Log.d("TAG", fav.id)
                                 val recipe: String = fav.id
                                 favIDList.add(recipe)
                                 Log.d("TAG", "Arraylist is now")
                                 Log.d("TAG", favIDList.toString())
-
                             }
                         }
-
-
-
                     }
                     onResult(favIDList)
                 }
