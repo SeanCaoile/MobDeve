@@ -1,5 +1,8 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
+import android.app.AlertDialog
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +16,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import android.widget.Toast
 import at.favre.lib.crypto.bcrypt.BCrypt
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class EditFragment : Fragment() {
     private val database = FirebaseFirestore.getInstance()
@@ -74,16 +81,13 @@ class EditFragment : Fragment() {
                 // You can show an error message or toast here
                 usernameTextEt.error = if (updatedUsername.isNullOrEmpty()) "This field is required." else "\"The Guru\" is not a valid username"
             }
-
-//
-//            if (updatedUsername.isNotEmpty() && oldPassword.isNotEmpty() && newPassword.isNotEmpty()) {
-//                fetchUserID(data.toString(), updatedUsername, oldPassword, newPassword)
-//            } else{
-//                updatedUsername.takeIf { it.isNullOrEmpty() }?.let { usernameTextEt.error = "This field is required." }
-//                oldPassword.takeIf { it.isNullOrEmpty() }?.let { oldPasswordEt.error = "This field is required." }
-//                newPassword.takeIf { it.isNullOrEmpty() }?.let { newPasswordEt.error = "This field is required." }
-//            }
         }
+
+        val deleteButton: Button = view.findViewById(R.id.deleteBtn)
+        deleteButton.setOnClickListener {
+            showPopup()
+        }
+
 
         // Back button
         val backButton: ImageButton = view.findViewById(R.id.backBtn)
@@ -189,6 +193,58 @@ class EditFragment : Fragment() {
 
         // Finish the current activity (EditFragment)
         requireActivity().finish()
+    }
+
+    private fun showPopup() {
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+
+        // Set the title and message of the dialog
+        alertDialogBuilder.setTitle("Delete Account")
+        alertDialogBuilder.setMessage("Are you sure you want to delete this account?")
+
+        // Set the positive button with a listener
+        alertDialogBuilder.setPositiveButton("Delete account") { _, _ ->
+            // Handle positive button click (if needed)
+
+            val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+            val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+            val firestore = Firebase.firestore
+
+            firestore.collection("users")
+                .whereEqualTo("username", currUser)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        val username = document.getString("username")
+
+                        if (username != null && currUser == username){
+                            document.reference.delete()
+                                .addOnSuccessListener {
+                                    // Document successfully deleted
+                                    Log.d("Firestore", "Account successfully deleted!")
+                                    goBackToMainActivity()
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle errors
+                                    Log.w("Firestore", "Error deleting document", e)
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents",exception)
+                }
+        }
+
+        // Set the negative button with a listener
+        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+            // Handle negative button click (if needed)
+            dialog.cancel()
+        }
+
+        // Create and show the alert dialog
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 
     private fun showToast(message: String) {
