@@ -1,6 +1,7 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -36,7 +37,7 @@ class RecipeActivity : AppCompatActivity()  {
     private lateinit var backBtn: ImageButton
     private lateinit var viewIngredBtn: FloatingActionButton
     private lateinit var favBtn: ImageButton
-
+    private lateinit var editBtn: FloatingActionButton
     private lateinit var popupWindow: PopupWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,7 @@ class RecipeActivity : AppCompatActivity()  {
         backBtn = findViewById<View>(R.id.backBtn) as ImageButton
         viewIngredBtn = findViewById<View>(R.id.floatingActionButton) as FloatingActionButton
         favBtn = findViewById<View>(R.id.saveBtn) as ImageButton
+        editBtn = findViewById<View>(R.id.editBtn) as FloatingActionButton
 
         foodNameTv.text = intent.getStringExtra(NAME_KEY)
         foodCreatorTv.text = intent.getStringExtra(CREATOR_KEY)
@@ -60,7 +62,6 @@ class RecipeActivity : AppCompatActivity()  {
         Glide.with(this)
             .load(intent.getStringExtra(IMG_KEY))
             .into(recipeImg)
-
 
         var favorited = false
 
@@ -120,6 +121,13 @@ class RecipeActivity : AppCompatActivity()  {
 
             }
         }
+
+//        editBtn.setOnClickListener{
+//            val intent = Intent(this, EditRecipeActivity::class.java)
+//            intent.putExtra(EditRecipeActivity.NAME_KEY, foodNameTv.text.toString())
+//
+//            startActivity(intent)
+//        }
 
         viewIngredBtn.setOnClickListener {
             showIngredientsPopup()

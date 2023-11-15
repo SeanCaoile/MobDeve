@@ -17,6 +17,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 
@@ -34,6 +35,7 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
     private lateinit var btnBack: ImageButton
 
     private lateinit var getContent: ActivityResultLauncher<String>
+    private var imgUploaded: Boolean = false
 
     private lateinit var ingredientsList: ArrayList<IngredientModel>
     private val database = FirebaseFirestore.getInstance()
@@ -73,7 +75,11 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
         // Set click listener for btnSaveRecipe
         btnSaveRecipe.setOnClickListener {
             // Call the function to upload the image
-            uploadImageToFirebaseStorage(imageUri, imageUploadCallback)
+            if (!imgUploaded) {
+                imgRecipe.setImageResource(R.drawable.no_img)
+            } else {
+                uploadImageToFirebaseStorage(imageUri, imageUploadCallback)
+            }
         }
 
 
@@ -92,6 +98,7 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
 
         btnUploadImage.setOnClickListener {
             getContent.launch("image/*")
+            imgUploaded = true
         }
     }
 
@@ -122,29 +129,34 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
         val recipeName = etRecipeName.text.toString()
         val instructions = etInstructions.text.toString()
         val ingredientsList = getIngredientsFromLayout()
-        val imageURI = imageURL
-        // Create a Recipe object
 
-        val recipeDB = hashMapOf(
-            "creator" to username,
-            "imageURI" to imageURL,
-            "ingredients" to ingredientsList,
-            "instructions" to instructions,
-            "name" to recipeName
-        )
-        Log.d("Name", recipeName)
-        Log.d("Instruc", instructions)
+        if (recipeName.isEmpty()) {
+            etRecipeName.error = "Recipe name is empty"
+        } else if (instructions.isEmpty()) {
+            etInstructions.error = "Instructions are empty"
+        } else {
+            // Create a Recipe object
+            val recipeDB = hashMapOf(
+                "creator" to username,
+                "imageURI" to imageURL,
+                "ingredients" to ingredientsList,
+                "instructions" to instructions,
+                "name" to recipeName
+            )
+            Log.d("Name", recipeName)
+            Log.d("Instruc", instructions)
 
-        recipesRef.add(recipeDB)
-            .addOnSuccessListener { documentReference ->
-                Log.d("AddRecipeActivity", "Recipe added with ID: ${documentReference.id}")
-                // Finish the activity or navigate to another screen
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Log.e("AddRecipeActivity", "Error adding recipe", e)
-                // Handle the error, if necessary
-            }
+            recipesRef.add(recipeDB)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("AddRecipeActivity", "Recipe added with ID: ${documentReference.id}")
+                    // Finish the activity or navigate to another screen
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Log.e("AddRecipeActivity", "Error adding recipe", e)
+                    // Handle the error, if necessary
+                }
+        }
     }
 
     private fun getIngredientsFromLayout(): ArrayList<IngredientModel> {
@@ -157,13 +169,22 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
             val etQuantity = rowView.findViewById<EditText>(R.id.quantity)
             val etMeasurement = rowView.findViewById<EditText>(R.id.measurement)
 
-            val ingredient = IngredientModel(
-                etIngredientName.text.toString(),
-                etQuantity.text.toString().toFloat(),
-                etMeasurement.text.toString()
-            )
+            if (etIngredientName.toString().isEmpty()){
+                etIngredientName.error = "Ingredient cannot be empty"
+            } else if (etQuantity.toString().isEmpty()){
+                etQuantity.error = "Quantity cannot be empty"
+            } else if (etMeasurement.toString().isEmpty()){
+                etMeasurement.error = "Measurement cannot be empty"
+            }
+            else {
+                val ingredient = IngredientModel(
+                    etIngredientName.text.toString(),
+                    etQuantity.text.toString().toFloat(),
+                    etMeasurement.text.toString()
+                )
+                ingredients.add(ingredient)
+            }
 
-            ingredients.add(ingredient)
         }
 
         return ingredients
