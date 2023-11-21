@@ -122,12 +122,12 @@ class RecipeActivity : AppCompatActivity()  {
             }
         }
 
-//        editBtn.setOnClickListener{
-//            val intent = Intent(this, EditRecipeActivity::class.java)
-//            intent.putExtra(EditRecipeActivity.NAME_KEY, foodNameTv.text.toString())
-//
-//            startActivity(intent)
-//        }
+        editBtn.setOnClickListener{
+            val intent = Intent(this, EditRecipeActivity::class.java)
+            intent.putExtra(EditRecipeActivity.NAME_KEY, foodNameTv.text.toString())
+
+            startActivity(intent)
+        }
 
         viewIngredBtn.setOnClickListener {
             showIngredientsPopup()
