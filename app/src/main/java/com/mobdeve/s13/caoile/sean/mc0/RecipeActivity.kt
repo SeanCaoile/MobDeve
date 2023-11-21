@@ -133,6 +133,94 @@ class RecipeActivity : AppCompatActivity()  {
             showIngredientsPopup()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPrefs = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+
+        foodNameTv = findViewById<View>(R.id.foodNameTv) as TextView
+        foodCreatorTv = findViewById<View>(R.id.food_creatorTv) as TextView
+        instructionsTv = findViewById<View>(R.id.instructionsTv) as TextView
+        recipeImg = findViewById<View>(R.id.recipeImg) as ImageView
+        backBtn = findViewById<View>(R.id.backBtn) as ImageButton
+        viewIngredBtn = findViewById<View>(R.id.floatingActionButton) as FloatingActionButton
+        favBtn = findViewById<View>(R.id.saveBtn) as ImageButton
+        editBtn = findViewById<View>(R.id.editBtn) as FloatingActionButton
+
+        foodNameTv.text = intent.getStringExtra(NAME_KEY)
+        foodCreatorTv.text = intent.getStringExtra(CREATOR_KEY)
+        instructionsTv.text = intent.getStringExtra(INSTRUCTIONS_KEY)
+
+        Glide.with(this)
+            .load(intent.getStringExtra(IMG_KEY))
+            .into(recipeImg)
+
+        var favorited = false
+
+        DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+        {
+            DBDataGetter.checkIfFavorited(it, currUser) {
+                if(it == true) {
+                    favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                    favorited = true
+                }
+                else {
+                    favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                    favorited = false
+                }
+            }
+            val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
+            Log.d("TAG", "Adding Ingredients")
+            Log.d("TAG", ingredients?.get(0).toString())
+            if (ingredients != null){
+
+                val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
+                val adapter = RecipeIngredientsAdapter(true,ingredients)
+
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = adapter
+            }
+
+            backBtn.setOnClickListener{
+                finish()
+            }
+
+            favBtn.setOnClickListener {
+                Log.w("Tag", "Current favorited status is " + favorited.toString())
+                if (favorited == false) {
+                    favBtn.setImageResource(R.drawable.ic_like_on_foreground)
+                    Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                    DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                    {
+                        Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                        DBDataGetter.addFavoriteReference(it, currUser, false)
+                        favorited = !favorited
+                    }
+
+
+                } else {
+                    favBtn.setImageResource(R.drawable.ic_like_off_foreground)
+                    Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
+                    DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
+                    {
+                        Log.d("TAG", "REEEEEEEEEEEEEEFFERENCE IS " + it.toString())
+                        DBDataGetter.addFavoriteReference(it, currUser, true)
+                        favorited = !favorited
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("PAUSE", "Fragment onPause")
+    }
+
     private fun showIngredientsPopup(){
         val overlay: FrameLayout = findViewById(R.id.overlay)
 //        val curIngredients = DataGenerator.generateIngredients()
