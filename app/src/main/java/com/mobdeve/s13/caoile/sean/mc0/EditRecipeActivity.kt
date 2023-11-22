@@ -1,25 +1,31 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
 class EditRecipeActivity : AppCompatActivity() {
 
     companion object{
         const val NAME_KEY = "NAME_KEY"
+        const val IMG_KEY = "IMG_KEY"
     }
 
     private lateinit var etFoodName: TextView
     private lateinit var food_creatorTv: TextView
     private lateinit var llIngredientsContainer: LinearLayout
     private lateinit var etIinstructions: EditText
+    private lateinit var recipeImg: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +35,14 @@ class EditRecipeActivity : AppCompatActivity() {
         food_creatorTv = findViewById(R.id.food_creatorTv)
         llIngredientsContainer = findViewById(R.id.llIngredientsContainer)
         etIinstructions = findViewById(R.id.etIinstructions)
+        recipeImg = findViewById(R.id.recipeImg)
 
         val recipeName = intent.getStringExtra(EditRecipeActivity.NAME_KEY) // Replace with your recipe name
 
         val db = FirebaseFirestore.getInstance()
         val recipeRef = db.collection("recipes")
         val query = recipeRef.whereEqualTo("name", recipeName)
+
 
         query.get()
             .addOnSuccessListener { documents ->
@@ -43,7 +51,9 @@ class EditRecipeActivity : AppCompatActivity() {
                     val imageURL = document.getString("imageURI") // Get the image URL
                     val creator = document.getString("creator") // Get the creator
                     // Get other recipe details similarly
-
+                    Glide.with(this)
+                        .load(imageURL)
+                        .into(recipeImg)
                     // Set the retrieved data to the respective UI elements
                     etFoodName.text = recipeName
                     food_creatorTv.text = creator
@@ -99,6 +109,14 @@ class EditRecipeActivity : AppCompatActivity() {
                             if (document.getString("name") == recipeName) {
                                 val updatedRecipeRef = db.collection("recipes").document(document.id)
 
+                                val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                                val editor = sharedPrefs.edit()
+                                editor.putString("docId", document.id)
+                                editor.apply()
+                                Log.d("docid", document.id)
+
+                                val imageURL = document.getString("imageURI")
+
                                 val updatedName = etFoodName.text.toString()
                                 val updatedCreator = food_creatorTv.text.toString()
                                 val updatedInstructions = etIinstructions.text.toString()
@@ -128,12 +146,12 @@ class EditRecipeActivity : AppCompatActivity() {
                                 )
                                     .addOnSuccessListener {
                                         // Handle success
+
                                         finish()
                                     }
                                     .addOnFailureListener { exception ->
                                         // Handle failure
                                     }
-                                break // Exit loop after updating the correct document
                             }
                         }
                     }
@@ -143,6 +161,40 @@ class EditRecipeActivity : AppCompatActivity() {
             }
         }
 
+        val deleteButton = findViewById<Button>(R.id.btnDelete)
+        deleteButton.setOnClickListener {
+            val db = FirebaseFirestore.getInstance()
+            val recipeRef = db.collection("recipes")
 
+            recipeRef.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        if (document.getString("name") == recipeName) {
+                            val recipeDocRef = db.collection("recipes").document(document.id)
+
+                            val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                            val editor = sharedPrefs.edit()
+                            editor.putString("docId", "deleted")
+                            editor.apply()
+
+                            // Delete the document from Firestore
+                            recipeDocRef.delete()
+                                .addOnSuccessListener {
+                                    // Handle successful deletion
+                                    Log.d("Delete", "DocumentSnapshot successfully deleted!")
+                                    finish()
+                                }
+                                .addOnFailureListener { e ->
+                                    // Handle unsuccessful deletion
+                                    Log.w("Delete", "Error deleting document", e)
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle any errors
+                }
+        }
     }
+
 }

@@ -101,41 +101,55 @@ class DBDataGetter {
                     Log.w(ContentValues.TAG, "Error getting documents.", exception)
                 }
         }
-        fun getFavoriteStrings(user:String, onResult: (ArrayList<String>) -> (Unit)) : ArrayList<String>
-        {
+        fun getFavoriteStrings(user: String, onResult: (ArrayList<String>) -> Unit) {
             val db = com.google.firebase.ktx.Firebase.firestore
-            var favIDList: ArrayList<String> = arrayListOf<String>()
+            val favIDList: ArrayList<String> = arrayListOf()
 
-//            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITES IN USER")
             db.collection("users")
-                .whereEqualTo("username", user.toString()) //set to username later
+                .whereEqualTo("username", user)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        if(document != null) {
-                            val dbFavStr = result.documents[0].data?.get("favorites") as ArrayList<DocumentReference>
+                        if (document != null) {
+                            val dbFavStr = document.data?.get("favorites") as? ArrayList<DocumentReference>
 
-                            for(fav in dbFavStr) {
+                            dbFavStr?.forEach { fav ->
+                                fav.get().addOnSuccessListener { favDocumentSnapshot ->
+                                    if (favDocumentSnapshot.exists()) {
+                                        // This favorite reference corresponds to an existing recipe
+                                        val recipeId = fav.id
+                                        favIDList.add(recipeId)
+                                        Log.d("TAG", "Added recipe to favIDList: $recipeId")
+                                    } else {
+                                        // This favorite reference does not correspond to any existing recipe
+                                        Log.d("TAG", "Invalid recipe reference found: ${fav.id}")
+                                        // Handle this scenario as needed
+                                        val userRef = document.reference
+                                        userRef.update("favorites", FieldValue.arrayRemove(fav))
+                                            .addOnSuccessListener {
+                                                Log.d("TAG", "Removed invalid reference: ${fav.id}")
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.w("TAG", "Error removing invalid reference: ${e.message}")
+                                            }
+                                    }
 
-                                Log.d("TAG", fav.id)
-                                val recipe: String = fav.id
-                                favIDList.add(recipe)
-                                Log.d("TAG", "Arraylist is now")
-                                Log.d("TAG", favIDList.toString())
-
+                                    if (favIDList.size == dbFavStr.size) {
+                                        // All favorites processed, return the result
+                                        onResult(favIDList)
+                                    }
+                                }.addOnFailureListener { e ->
+                                    Log.w("TAG", "Error fetching favorite document: ${e.message}")
+                                }
                             }
                         }
-
-
-
                     }
-                    onResult(favIDList)
                 }
                 .addOnFailureListener { exception ->
-                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                    Log.w("TAG", "Error getting documents.", exception)
                 }
-            return favIDList
         }
+
 
         fun getFavorites(currentUser: String, onResult: (ArrayList<RecipeModel>) -> (Unit)) : ArrayList<RecipeModel>
         {

@@ -197,6 +197,7 @@
             android:layout_margin="24dp"
             android:backgroundTint="#FFD2A1"
             android:clickable="true"
+            app:maxImageSize="50dp"
             app:layout_constraintBottom_toTopOf="@id/floatingActionButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/edit_icon" />

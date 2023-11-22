@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:hint="Quantity"
         android:layout_marginLeft="20dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
         app:layout_constraintTop_toBottomOf="@id/ingredientName"
         app:layout_constraintStart_toStartOf="parent"/>
 
