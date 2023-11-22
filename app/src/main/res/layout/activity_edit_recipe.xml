@@ -44,7 +44,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -55,108 +55,95 @@
                     android:layout_height="200dp"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/pizzafritta" />
+                    app:srcCompat="@drawable/pizzafritta"
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@id/constraintLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/recipeImg">
 
-                        <LinearLayout
-                            android:id="@+id/recipeHeader"
-                            android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/recipeHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="8dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/etFoodName"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginHorizontal="8dp"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:text="Sample Food Name"
+                            android:textSize="30sp" />
 
-                            <TextView
-                                android:id="@+id/foodNameTv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Sample Food Name"
-                                android:textSize="30sp" />
+                        <TextView
+                            android:id="@+id/food_creatorTv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="FoodGuru" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/food_creatorTv"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="FoodGuru" />
-                        </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <ImageButton
-                            android:id="@+id/saveBtn"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center_vertical"
-                            android:adjustViewBounds="true"
-                            android:background="@android:color/transparent"
-                            android:elevation="5dp"
-                            android:scaleX="1.5"
-                            android:scaleY="1.5"
-                            android:layout_marginEnd="32dp"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            android:src="@drawable/ic_like_off_foreground" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--                    <Button-->
-<!--                        android:id="@+id/saveBtn"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="48dp"-->
-<!--                        android:layout_marginHorizontal="30dp"-->
-<!--                        android:layout_marginVertical="8dp"-->
-<!--                        android:text="Save Recipe" />-->
-
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/lowerCL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginTop="16dp"
-                    android:layout_marginHorizontal="16dp">
+                    android:layout_marginHorizontal="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/constraintLayout2">
 
                     <TextView
+                        android:id="@+id/ingredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/ingredients"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cv1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        app:elevation="5dp">
+                        app:elevation="5dp"
+                        app:layout_constraintTop_toBottomOf="@id/ingredients">
 
                         <LinearLayout
+                            android:id="@+id/llIngredientsContainer"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/lightYellow"
-                            android:orientation="vertical">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/ingredientRV"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="16dp"
+                            app:layout_constraintTop_toBottomOf="@id/btnAddIngredient">
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
 
                     <TextView
+                        android:id="@+id/instructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/instructions"
                         android:textSize="20sp"
-                        android:layout_marginTop="8dp"/>
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/cv1"/>
 
                     <androidx.cardview.widget.CardView
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/cv2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        app:elevation="5dp">
+                        app:elevation="5dp"
+                        app:layout_constraintTop_toBottomOf="@+id/instructions">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -164,8 +151,8 @@
                             android:background="@color/lightYellow"
                             android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/instructionsTv"
+                            <EditText
+                                android:id="@+id/etIinstructions"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/sample"
@@ -173,34 +160,29 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
+                <Button
+                    android:id="@+id/btnConfirm"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:text="Confirm"
+                    app:layout_constraintTop_toBottomOf="@id/lowerCL"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                </Button>
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:text="Delete"
+                    app:layout_constraintTop_toBottomOf="@id/btnConfirm"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="24dp"
-            android:backgroundTint="#FFD2A1"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ingredients_icon" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/editBtn"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="24dp"
-            android:backgroundTint="#FFD2A1"
-            android:clickable="true"
-            app:maxImageSize="50dp"
-            app:layout_constraintBottom_toTopOf="@id/floatingActionButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/edit_icon" />
 
         <FrameLayout
             android:id="@+id/overlay"

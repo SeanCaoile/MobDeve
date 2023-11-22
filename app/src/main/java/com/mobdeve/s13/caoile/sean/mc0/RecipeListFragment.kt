@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
@@ -37,6 +38,17 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
         // getting the recipes
+//        val recipes = DataGenerator.generateRecipes(currUser)
+        val btnAddRecipe = view.findViewById<Button>(R.id.btnAddRecipe)
+        btnAddRecipe.setOnClickListener {
+            val intent = Intent(requireContext(), AddRecipeActivity::class.java)
+
+            intent.putExtra("USERNAME_KEY", currUser)
+
+            startActivity(intent)
+        }
+
+
         val searchIcon: ImageButton = view.findViewById(R.id.searchIcon)
         this.favFilter = requireView().findViewById(R.id.floatingActionButton)
         DataGenerator.generateRecipes(currUser) {
