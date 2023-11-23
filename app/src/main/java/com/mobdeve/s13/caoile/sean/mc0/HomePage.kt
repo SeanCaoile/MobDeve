@@ -19,14 +19,12 @@ import com.google.firebase.auth.auth
 
 class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
-    private lateinit var auth : FirebaseAuth
     private lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         setContentView(R.layout.home_page)
 
-        auth = FirebaseAuth.getInstance()
         val username = intent.getStringExtra("name")
         if (username != null) {
             Log.d("username", username)
@@ -75,9 +73,8 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             R.id.logout -> {
                 Toast.makeText(this,"Logout",Toast.LENGTH_SHORT).show()
                 FirebaseAuth.getInstance().signOut()
-                Firebase.auth.signOut()
                 startActivity(Intent(this,MainActivity::class.java))
-                finish()
+
             }
         }
 

@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -38,7 +39,8 @@ class UserActivity : AppCompatActivity (){
             val recyclerView = findViewById<RecyclerView>(R.id.favDishes)
             val adapter = HomeAdapter(favDishes)
             
-            recyclerView.layoutManager = LinearLayoutManager(this)
+//            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.layoutManager = GridLayoutManager(this, 2)
             recyclerView.adapter = adapter
         }
 

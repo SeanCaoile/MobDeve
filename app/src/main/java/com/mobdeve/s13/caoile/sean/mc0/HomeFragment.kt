@@ -21,27 +21,21 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val currentUser: TextView = view.findViewById(R.id.username)
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs",Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
+        currentUser.text = currUser
         DBDataGetter.getFavorites(currUser) {
             val dishes = it
             val itemAdapter = HomeAdapter(dishes)
 
-
-            currentUser.text = currUser
-
             val recyclerView: RecyclerView = view.findViewById(R.id.favDishes)
             recyclerView.layoutManager = GridLayoutManager(context, 2)
-
             recyclerView.adapter = itemAdapter
         }
-
-
 
         val editBtn = view.findViewById<Button>(R.id.editBtn)
 

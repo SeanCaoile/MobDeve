@@ -20,9 +20,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
     lateinit var favFilter: FloatingActionButton
     private var fabOn: Boolean = false
 
-//    private val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-//    private val currUser = sharedPrefs.getString("username","DEFAULT").toString()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,8 +34,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
 
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
-        // getting the recipes
-//        val recipes = DataGenerator.generateRecipes(currUser)
+
         val btnAddRecipe = view.findViewById<Button>(R.id.btnAddRecipe)
         btnAddRecipe.setOnClickListener {
             val intent = Intent(requireContext(), AddRecipeActivity::class.java)
@@ -48,24 +44,15 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             startActivity(intent)
         }
 
-
         val searchIcon: ImageButton = view.findViewById(R.id.searchIcon)
         this.favFilter = requireView().findViewById(R.id.floatingActionButton)
         DataGenerator.generateRecipes(currUser) {
             val recipes = it
 
-            // Assign recipes to ItemAdapter
             val itemAdapter = RecipeListAdapter(recipes, listener)
-
-            // Set the LayoutManager that
-            // this RecyclerView will use.
             val recyclerView: RecyclerView = view.findViewById(R.id.recipeListRV)
             recyclerView.layoutManager = LinearLayoutManager(context)
-
-            // adapter instance is set to the
-            // recyclerview to inflate the items.
             recyclerView.adapter = itemAdapter
-
 
             favFilter.setOnClickListener(View.OnClickListener {
                 if(fabOn == false) {
@@ -77,15 +64,14 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
                         Log.d("TAG", "DONE GETTING FAVS")
                         recyclerView.adapter = newItemAdapter
 
-                        favFilter.setImageResource(R.drawable.staron)
+                        favFilter.setImageResource(R.drawable.ic_like_on_foreground)
                     }
                 }
                 else {
                     recyclerView.adapter = itemAdapter
                     fabOn = false
-                    favFilter.setImageResource(R.drawable.staroff)
+                    favFilter.setImageResource(R.drawable.ic_like_off_foreground)
                 }
-
             })
         }
 
@@ -94,13 +80,11 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
             val recipeToSearch = etSearch.text.toString().trim()
 
             if (recipeToSearch.isNotEmpty()) {
-                // Search for the username in Firestore
                 searchRecipeInFirestore(recipeToSearch,currUser)
             } else {
-                // Handle empty username
                 getRecipes(currUser)
                 fabOn = false
-                favFilter.setImageResource(R.drawable.staroff)
+                favFilter.setImageResource(R.drawable.ic_like_off_foreground)
             }
         }
     }
@@ -138,7 +122,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
                 favFilter.setImageResource(R.drawable.staroff)
             }
         }
-
     }
 
     private fun getRecipes(currUser: String){
@@ -148,10 +131,8 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         }
     }
     private fun searchRecipeInFirestore(searchRecipe: String, currUser: String) {
-
         DataGenerator.searchRecipe(searchRecipe,currUser){
             val recipes = it
-
             setupView(recipes)
         }
     }

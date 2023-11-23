@@ -30,23 +30,18 @@ class UsersFragment : Fragment(), UserListClickListener {
 
         val sharedPrefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
-        //getting users
+
         getUsers(currUser)
 
-        // Get reference to the ImageButton
         val searchIcon: ImageButton = view.findViewById(R.id.searchIcon)
 
-        // Set OnClickListener for the ImageButton
         searchIcon.setOnClickListener {
-            // Get the username from the EditText
             val etSearch: EditText = view.findViewById(R.id.etSearch)
             val usernameToSearch = etSearch.text.toString().trim()
 
             if (usernameToSearch.isNotEmpty()) {
-                // Search for the username in Firestore
                 searchUsernameInFirestore(currUser,usernameToSearch)
             } else {
-                // Handle empty username
                 getUsers(currUser)
             }
         }

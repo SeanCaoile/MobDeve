@@ -17,8 +17,6 @@ import androidx.fragment.app.FragmentManager
 import android.widget.Toast
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
@@ -40,7 +38,6 @@ class EditFragment : Fragment() {
         val oldPasswordEt: EditText = view.findViewById(R.id.oldpw)
         val newPasswordEt: EditText = view.findViewById(R.id.newpw)
 
-        // Confirm button
         val confirmButton: Button = view.findViewById(R.id.confirmBtn)
         confirmButton.setOnClickListener {
             val updatedUsername = usernameTextEt.text.toString()
@@ -49,17 +46,14 @@ class EditFragment : Fragment() {
 
             if (updatedUsername.isNotEmpty() && updatedUsername != "The Guru") {
                 if (newPassword.length >= 5) {
-                    // Check if the username already exists in Firebase Database
                     Log.w("checking", "checking")
                     database.collection("users")
                         .document(updatedUsername)
                         .get()
                         .addOnSuccessListener { document ->
                             if (document.exists()) {
-                                // Username already exists, show an error message
                                 usernameTextEt.error = "Username already exists."
                             } else {
-                                // Username does not exist
                                 if (oldPassword.isNotEmpty() && newPassword.isNotEmpty()) {
                                     fetchUserID(data.toString(), updatedUsername, oldPassword, newPassword)
                                 } else{
