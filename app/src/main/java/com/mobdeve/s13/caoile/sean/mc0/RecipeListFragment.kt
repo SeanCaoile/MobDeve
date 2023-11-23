@@ -24,7 +24,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         listener = this
         return inflater.inflate(R.layout.fragment_recipes, container, false)
     }
@@ -38,9 +37,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         val btnAddRecipe = view.findViewById<Button>(R.id.btnAddRecipe)
         btnAddRecipe.setOnClickListener {
             val intent = Intent(requireContext(), AddRecipeActivity::class.java)
-
             intent.putExtra("USERNAME_KEY", currUser)
-
             startActivity(intent)
         }
 
@@ -48,7 +45,6 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
         this.favFilter = requireView().findViewById(R.id.floatingActionButton)
         DataGenerator.generateRecipes(currUser) {
             val recipes = it
-
             val itemAdapter = RecipeListAdapter(recipes, listener)
             val recyclerView: RecyclerView = view.findViewById(R.id.recipeListRV)
             recyclerView.layoutManager = LinearLayoutManager(context)
@@ -107,7 +103,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
                 recyclerView.layoutManager = LinearLayoutManager(context)
                 recyclerView.adapter = newItemAdapter
 
-                favFilter.setImageResource(R.drawable.staron)
+                favFilter.setImageResource(R.drawable.ic_like_on_foreground)
             }
         }
         else {
@@ -119,7 +115,7 @@ class RecipeListFragment : Fragment(), RecipeListClickListener {
                 recyclerView.adapter = itemAdapter
 
                 fabOn = false
-                favFilter.setImageResource(R.drawable.staroff)
+                favFilter.setImageResource(R.drawable.ic_like_off_foreground)
             }
         }
     }

@@ -3,7 +3,6 @@ package com.mobdeve.s13.caoile.sean.mc0
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 
 class RecipeListAdapter(private val data: ArrayList<RecipeModel>, val recipeListClickListener: RecipeListClickListener): RecyclerView.Adapter<RecipeListViewHolder>() {
 

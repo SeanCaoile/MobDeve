@@ -1,7 +1,5 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.content.Context
-import android.location.GnssMeasurement
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.View
@@ -12,7 +10,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
-import org.w3c.dom.Text
 
 class IngredientEditActivity : AppCompatActivity(){
     private val database = FirebaseFirestore.getInstance()
@@ -79,12 +76,10 @@ class IngredientEditActivity : AppCompatActivity(){
                 newQuantity.takeIf { it.isNullOrEmpty() }?.let { quantityET.error = "This field is required." }
                 newMeasurement.takeIf { it.isNullOrEmpty() }?.let { measurementET.error = "This field is required." }
             }
-
         })
     }
 
     private fun updateIngredient(ingredientName: String, newQuantity: Float, newMeasurement: String, callback: (Boolean) -> Unit) {
-        // Update the user's password in the database
         val sharedPrefs = getSharedPreferences("AppPrefs", MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
 
@@ -101,18 +96,13 @@ class IngredientEditActivity : AppCompatActivity(){
                     put("quantity",newQuantity)
                 }
 
-                // Update the document with the new map
                 usersRef.document(documentId).update("ingredient list",ingredientsArray)
                     .addOnSuccessListener {
-                        // Update successful
-                        // Handle success, if needed
                         println("Array updated successfully")
                         showToast("${ingredientName} Ingredient Edited")
                         callback(true)
                     }
                     .addOnFailureListener { e ->
-                        // Handle failure
-                        // Log or display an error message
                         println("Error updating array: $e")
                         showToast("Failed to Edit Ingredient")
                         callback(false)
@@ -121,7 +111,6 @@ class IngredientEditActivity : AppCompatActivity(){
         }
         .addOnFailureListener { e ->
             // Handle failure
-            // Log or display an error message
         }
     }
 
@@ -149,13 +138,11 @@ class IngredientEditActivity : AppCompatActivity(){
 
                     usersRef.document(documentId).update("ingredient list", newArray)
                         .addOnSuccessListener {
-                            // Update successful
                             println("Array updated successfully")
                             showToast("${ingredientName} Ingredient Deleted")
                             callback(true)
                         }
                         .addOnFailureListener { e ->
-                            // Handle error
                             println("Error updating array: $e")
                             showToast("Failed to delete Ingredient")
                             callback(false)

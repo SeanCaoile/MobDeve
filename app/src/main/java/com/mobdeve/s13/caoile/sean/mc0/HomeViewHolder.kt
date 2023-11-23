@@ -15,6 +15,5 @@ class HomeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         Glide.with(itemView.context)
             .load(favDish.imageURL)
             .into(favDishIV)
-//        favDishIV.setImageResource(favDish.imageURL)
     }
 }

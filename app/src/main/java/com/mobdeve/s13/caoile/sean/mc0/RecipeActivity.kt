@@ -26,9 +26,6 @@ class RecipeActivity : AppCompatActivity()  {
         const val INGREDIENTS_KEY = "INGREDIENTS_KEY"
         const val INSTRUCTIONS_KEY = "INSTRUCTIONS_KEY"
         const val IMG_KEY = "IMG_KEY"
-        const val CUR_ING_KEY = "CUR_ING_KEY"
-        const val POSITION_KEY = "POSITION_KEY"
-        const val ID_KEY = "ID_KEY"
     }
 
     private lateinit var foodNameTv: TextView
@@ -68,9 +65,6 @@ class RecipeActivity : AppCompatActivity()  {
 
         val foodCreator = intent.getStringExtra(CREATOR_KEY).toString().substring(4)
 
-        Log.d("creator", foodCreator)
-        Log.d("user", currUser)
-        // Check if the current user is the creator of the recipe
         if (currUser != foodCreator) {
             editBtn.visibility = View.INVISIBLE
             editBtn.isEnabled = false
@@ -79,7 +73,6 @@ class RecipeActivity : AppCompatActivity()  {
             editBtn.isEnabled = true
         }
 
-        //favorited = !favorited
         DBDataGetter.getCurrentRecipeReference(foodNameTv.text.toString(), foodCreatorTv.text.toString().drop(4))
         {
             DBDataGetter.checkIfFavorited(it, currUser) {
@@ -93,10 +86,7 @@ class RecipeActivity : AppCompatActivity()  {
                 }
             }
             val ingredients = intent.getSerializableExtra(RecipeActivity.INGREDIENTS_KEY) as? ArrayList<IngredientModel>
-            Log.d("TAG", "Adding Ingredients")
-            Log.d("TAG", ingredients?.get(0).toString())
             if (ingredients != null){
-
                 val recyclerView = findViewById<RecyclerView>(R.id.ingredientRV)
                 val adapter = RecipeIngredientsAdapter(true,ingredients)
 
@@ -120,7 +110,6 @@ class RecipeActivity : AppCompatActivity()  {
                         favorited = !favorited
                     }
 
-
                 } else {
                     favBtn.setImageResource(R.drawable.ic_like_off_foreground)
                     Log.d("TAG", "finding Reference " + foodNameTv.text.toString())
@@ -130,9 +119,7 @@ class RecipeActivity : AppCompatActivity()  {
                         DBDataGetter.addFavoriteReference(it, currUser, true)
                         favorited = !favorited
                     }
-
                 }
-
             }
         }
 
@@ -150,8 +137,6 @@ class RecipeActivity : AppCompatActivity()  {
     override fun onResume() {
         super.onResume()
 
-        Log.d("on resume", "ON RESUMEE")
-        // Retrieve the stored document.id from SharedPreferences
         val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val recipeId = sharedPrefs.getString("docId", "DEFAULT").toString()
 
@@ -177,23 +162,19 @@ class RecipeActivity : AppCompatActivity()  {
                         val creator = document.getString("creator") ?: ""
                         val instructions = document.getString("instructions") ?: ""
                         val imageURL = document.getString("imageURI") ?: ""
-                        Log.d("recipe", recipeName)
-                        // Update UI elements with fetched data
+
                         foodNameTv.text = recipeName
                         foodCreatorTv.text = creator
                         instructionsTv.text = instructions
 
-                        // Load image using Glide or any other image loading library
                         Glide.with(this)
                             .load(imageURL)
                             .into(recipeImg)
 
-                        // Fetch and update ingredients similarly
                         val ingredientsList = document.get("ingredients") as? List<HashMap<String, Any>>?
                         if (ingredientsList != null) {
                             val ingredients = ArrayList<IngredientModel>()
                             for (ingredientData in ingredientsList) {
-                                // Create IngredientModel objects and add them to the ingredients list
                                 val name = ingredientData["ingredient"] as? String ?: ""
                                 val quantity = (ingredientData["quantity"] as? Double)?.toFloat() ?: 0.0f
                                 val measurement = ingredientData["measurement"] as? String ?: ""
@@ -203,11 +184,9 @@ class RecipeActivity : AppCompatActivity()  {
                             }
 
                             val ingredientRV = findViewById<RecyclerView>(R.id.ingredientRV)
-                            // Update the RecyclerView adapter with the updated ingredients list
                             val adapter = RecipeIngredientsAdapter(true, ingredients)
                             ingredientRV.adapter = adapter
                         }
-
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -217,11 +196,7 @@ class RecipeActivity : AppCompatActivity()  {
         else {
             Log.d("ignore", "ignore")
         }
-        // Use this recipeId to fetch updated data from Firestore
-
     }
-
-
 
     override fun onPause() {
         super.onPause()
@@ -230,10 +205,9 @@ class RecipeActivity : AppCompatActivity()  {
 
     private fun showIngredientsPopup(){
         val overlay: FrameLayout = findViewById(R.id.overlay)
-//        val curIngredients = DataGenerator.generateIngredients()
+
         val sharedPrefs = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         val currUser = sharedPrefs.getString("username","DEFAULT").toString()
-
 
         DBDataGetter.getIngredients(currUser){
             var currIngredients = it

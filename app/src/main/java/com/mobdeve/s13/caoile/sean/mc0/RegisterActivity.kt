@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.google.firebase.firestore.DocumentReference
@@ -17,7 +16,6 @@ class RegisterActivity : AppCompatActivity() {
 
     private val database = FirebaseFirestore.getInstance()
     private val usersRef = database.collection("users")
-    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -36,7 +34,6 @@ class RegisterActivity : AppCompatActivity() {
             val password = passwordEditText.text.toString()
             val confirmPW = confirmPWEditText.text.toString()
 
-            // Check if the username is not empty and password is valid
             if (username.isNotEmpty() && username != "The Guru") {
                 if (password.length >= 5) {
                     if (password == confirmPW) {
@@ -47,13 +44,10 @@ class RegisterActivity : AppCompatActivity() {
                             .get()
                             .addOnSuccessListener { document ->
                                 if (document.exists()) {
-                                    // Username already exists, show an error message
+                                    // Username already exists
                                     usernameEditText.error = "Username already exists."
                                 } else {
                                     // Username does not exist, proceed with the registration process
-                                    // You can initiate the user registration here
-
-                                    // Call the function to register the user
                                     registerUser(username, password)
                                 }
                             }
@@ -62,23 +56,19 @@ class RegisterActivity : AppCompatActivity() {
                                 Log.e("query_error", "Error querying the database: $exception")
                             }
                     } else {
-                        // Passwords do not match, show an error message
+                        // Passwords do not match
                         confirmPWEditText.error = "The passwords do not match"
                     }
                 } else {
                     passwordEditText.error = "The password must be at least 5 characters long."
                 }
             } else {
-                // Handle invalid input
-                // You can show an error message or toast here
                 usernameEditText.error = if (username.isNullOrEmpty()) "This field is required." else "\"The Guru\" is not a valid username"
             }
         }
     }
 
-    // Function to register the user
     private fun registerUser(username: String, password: String) {
-        // Hash the password using bcrypt
         val hashedPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray())
         Log.d("HashedPassword", "Hashed password: $hashedPassword")
         val userID = UUID.randomUUID().toString()
@@ -88,9 +78,7 @@ class RegisterActivity : AppCompatActivity() {
             "userID" to userID,
             "username" to username,
             "password" to hashedPassword,
-            // Add other user data as needed
             "favorites" to favorites
-
         )
 
         usersRef.document(username)
@@ -98,19 +86,15 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // User registered successfully
-                    // You can proceed to the next activity or perform other actions
                     Log.w("userID", "userID $userID")
                     Log.w("regis", "Successful register")
                     showToast("Registration Successful")
                     finish()
                 } else {
                     // Registration failed
-                    // You can show an error message or toast here
                     Log.w("failed", "failed register")
                     showToast("Registration Failed")
                 }
-
-
             }
     }
     private fun showToast(message: String) {

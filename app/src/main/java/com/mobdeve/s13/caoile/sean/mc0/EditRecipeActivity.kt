@@ -1,12 +1,12 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,7 +18,6 @@ class EditRecipeActivity : AppCompatActivity() {
 
     companion object{
         const val NAME_KEY = "NAME_KEY"
-        const val IMG_KEY = "IMG_KEY"
     }
 
     private lateinit var etFoodName: TextView
@@ -37,12 +36,11 @@ class EditRecipeActivity : AppCompatActivity() {
         etIinstructions = findViewById(R.id.etIinstructions)
         recipeImg = findViewById(R.id.recipeImg)
 
-        val recipeName = intent.getStringExtra(EditRecipeActivity.NAME_KEY) // Replace with your recipe name
+        val recipeName = intent.getStringExtra(NAME_KEY) // Replace with your recipe name
 
         val db = FirebaseFirestore.getInstance()
         val recipeRef = db.collection("recipes")
         val query = recipeRef.whereEqualTo("name", recipeName)
-
 
         query.get()
             .addOnSuccessListener { documents ->
@@ -50,18 +48,14 @@ class EditRecipeActivity : AppCompatActivity() {
                     val document = documents.documents[0]
                     val imageURL = document.getString("imageURI") // Get the image URL
                     val creator = document.getString("creator") // Get the creator
-                    // Get other recipe details similarly
                     Glide.with(this)
                         .load(imageURL)
                         .into(recipeImg)
-                    // Set the retrieved data to the respective UI elements
+
                     etFoodName.text = recipeName
                     food_creatorTv.text = creator
-                    // Set other data to respective UI elements
 
-                    // For ingredients
                     val ingredients = document.get("ingredients") as? ArrayList<HashMap<String, Any>>?
-                    // Loop through ingredients and display them
                     ingredients?.forEach { ingredientData ->
                         val name = ingredientData["ingredient"] as? String ?: ""
                         val quantity = ingredientData["quantity"] as? Number ?: ""
@@ -85,8 +79,6 @@ class EditRecipeActivity : AppCompatActivity() {
                             llIngredientsContainer.removeView(rowView)
                         }
                     }
-
-                    // For instructions
                     val instructions = document.getString("instructions")
                     etIinstructions.setText(instructions)
                 } else {
@@ -96,6 +88,11 @@ class EditRecipeActivity : AppCompatActivity() {
             .addOnFailureListener { exception ->
                 // Handle any errors
             }
+
+        val btnBack = findViewById<ImageButton>(R.id.backBtn)
+        btnBack.setOnClickListener{
+            finish()
+        }
 
         val confirmButton = findViewById<Button>(R.id.btnConfirm)
         confirmButton.setOnClickListener {
@@ -122,7 +119,6 @@ class EditRecipeActivity : AppCompatActivity() {
                                 val updatedInstructions = etIinstructions.text.toString()
                                 val updatedIngredients = ArrayList<HashMap<String, Any>>()
 
-                                // Collect updated ingredients from llIngredientsContainer
                                 for (i in 0 until llIngredientsContainer.childCount) {
                                     val rowView = llIngredientsContainer.getChildAt(i)
                                     val ingredientName = rowView.findViewById<EditText>(R.id.ingredientName).text.toString()
@@ -137,7 +133,6 @@ class EditRecipeActivity : AppCompatActivity() {
                                     updatedIngredients.add(ingredientMap)
                                 }
 
-                                // Update the Firestore document with the new data
                                 updatedRecipeRef.update(
                                     "name", updatedName,
                                     "creator", updatedCreator,
@@ -145,8 +140,6 @@ class EditRecipeActivity : AppCompatActivity() {
                                     "ingredients", updatedIngredients
                                 )
                                     .addOnSuccessListener {
-                                        // Handle success
-
                                         finish()
                                     }
                                     .addOnFailureListener { exception ->
@@ -177,7 +170,6 @@ class EditRecipeActivity : AppCompatActivity() {
                             editor.putString("docId", "deleted")
                             editor.apply()
 
-                            // Delete the document from Firestore
                             recipeDocRef.delete()
                                 .addOnSuccessListener {
                                     // Handle successful deletion
@@ -196,5 +188,4 @@ class EditRecipeActivity : AppCompatActivity() {
                 }
         }
     }
-
 }

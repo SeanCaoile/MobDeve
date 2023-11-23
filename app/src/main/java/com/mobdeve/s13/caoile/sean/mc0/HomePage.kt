@@ -5,24 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 
 class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var drawerLayout: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         setContentView(R.layout.home_page)
 
         val username = intent.getStringExtra("name")
@@ -74,10 +69,8 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                 Toast.makeText(this,"Logout",Toast.LENGTH_SHORT).show()
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this,MainActivity::class.java))
-
             }
         }
-
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }

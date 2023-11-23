@@ -40,22 +40,17 @@ class HomeFragment : Fragment() {
         val editBtn = view.findViewById<Button>(R.id.editBtn)
 
         editBtn.setOnClickListener {
-            // Create an instance of the EditFragment or the fragment you want to navigate to
             val editFragment = EditFragment()
 
-            // Create a Bundle to pass data
             val dataBundle = Bundle()
             val username = view.findViewById<TextView>(R.id.username).text.toString()
-            dataBundle.putString("key", username) // Replace with your actual data
-
-            // Set the arguments of the fragment with the data Bundle
+            dataBundle.putString("key", username)
             editFragment.arguments = dataBundle
 
-            // Replace the current fragment with the EditFragment
             val fragmentManager: FragmentManager = requireActivity().supportFragmentManager
             val transaction: FragmentTransaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, editFragment) // Use your container ID
-            transaction.addToBackStack(null) // Add transaction to the back stack
+            transaction.replace(R.id.fragment_container, editFragment)
+            transaction.addToBackStack(null)
             transaction.commit()
         }
     }

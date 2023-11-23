@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
         android:layout_gravity="center"
@@ -11,6 +13,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_margin="5dp"
         app:elevation="5dp">
+
         <ImageView
             android:id="@+id/dishImg"
             android:layout_width="300dp"
@@ -18,6 +21,7 @@
             app:srcCompat="@drawable/pizzafritta"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"/>
+
         <TextView
             android:id="@+id/nameTv"
             android:layout_width="match_parent"
@@ -28,5 +32,4 @@
             android:layout_gravity="bottom"
             android:background="@color/lightYellow"/>
     </androidx.cardview.widget.CardView>
-
 </LinearLayout>

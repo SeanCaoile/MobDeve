@@ -14,7 +14,7 @@ class DBDataGetter {
             val db = com.google.firebase.ktx.Firebase.firestore
 
             db.collection("users")
-                .whereEqualTo("username", user.toString())
+                .whereEqualTo("username", user)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -50,7 +50,7 @@ class DBDataGetter {
             val db = com.google.firebase.ktx.Firebase.firestore
             Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITE STATUS")
             db.collection("users")
-                .whereEqualTo("username", user.toString())
+                .whereEqualTo("username", user)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -123,7 +123,6 @@ class DBDataGetter {
                                                 Log.w("TAG", "Error removing invalid reference: ${e.message}")
                                             }
                                     }
-
                                     if (favIDList.size == dbFavStr.size) {
                                         onResult(favIDList)
                                     }
@@ -161,7 +160,7 @@ class DBDataGetter {
                                     val ingredientName = map["ingredient"].toString()
                                     val measurement = map["measurement"].toString()
                                     val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
-                                    val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
+                                    val ingredient = IngredientModel(ingredientName, quantity, measurement)
 
                                     ingredients.add(ingredient)
                                 }
@@ -201,7 +200,7 @@ class DBDataGetter {
                                 val name: String = userIngredient["ingredient"].toString()
                                 val measurement = userIngredient["measurement"].toString()
                                 val quantity = userIngredient["quantity"].toString()
-                                val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
+                                val newIngredient = IngredientModel(name, quantity.toFloat(), measurement)
                                 ingredientsList.add(newIngredient)
                             }
                         }

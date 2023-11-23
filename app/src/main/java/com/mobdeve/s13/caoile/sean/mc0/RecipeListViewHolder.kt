@@ -1,6 +1,5 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView

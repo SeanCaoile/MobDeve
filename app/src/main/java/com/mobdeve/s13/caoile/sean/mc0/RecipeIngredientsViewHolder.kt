@@ -12,7 +12,6 @@ class RecipeIngredientsViewHolder(itemView: View): RecyclerView.ViewHolder(itemV
     private val quantityType: TextView = itemView.findViewById(R.id.quantityType)
 
     fun bindData(ingredient: IngredientModel) {
-//        checkbox?.isChecked ?:  = false
         checkbox?.isChecked = checkbox?.isChecked ?: false
 
         itemTv.text = ingredient.ingredient
