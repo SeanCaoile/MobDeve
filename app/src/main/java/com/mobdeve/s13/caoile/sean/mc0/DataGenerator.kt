@@ -3,6 +3,7 @@ package com.mobdeve.s13.caoile.sean.mc0
 import android.content.ContentValues
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.firestore
 
@@ -130,16 +131,55 @@ class DataGenerator {
                 .addOnSuccessListener { result ->
                     for (document in result) {
                         val username = document.getString("username")
+                        var favList: ArrayList<DocumentReference> = arrayListOf<DocumentReference>()
+                        try{
+                            favList = document.get("favorites") as ArrayList<DocumentReference>
+
+                        }
+                        catch (e: Exception) {
+                            Log.d("Error TAG" , e.toString())
+                        }
+
+
 
                         if (username != null && currentUser != username){
 //                            val recipes = document.get("favorites") as ArrayList<RecipeModel>
-                            val user = UserModel(username, arrayListOf<RecipeModel>(
-                                recipe1))
 
-                            users.add(user)
+                            if(favList.isEmpty()) {
+                                Log.d("TAGGERS", username.toString() + " favlist is empty")
+                                val user = UserModel(username, arrayListOf<RecipeModel>())
+                                users.add(user)
+                                onResult(users)
+                            }
+                            else {
+
+                                Log.d("TAGGERS", username.toString() + " favlist is not empty")
+                                DBDataGetter.getFavorites(username) {
+
+                                    val updatedRecipes = it
+                                    Log.d("TAG", it.toString())
+                                    Log.d("TAG", "DONE GETTING FAVS FOR OTHER USER " + username)
+
+                                    val user = UserModel(username, updatedRecipes)
+
+                                    users.add(user)
+                                    onResult(users)
+                                }
+                            }
+                            try{
+                                Log.d("USER TAG", "getting " + username.toString())
+
+
+                            }
+                            catch(e: Exception) {
+                                Log.d("AWOOOOGA", "Catch")
+
+                            }
+
+
                         }
                     }
-                    onResult(users)
+
                 } .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents",exception)
                 }
