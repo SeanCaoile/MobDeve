@@ -222,7 +222,6 @@ class DataGenerator {
                                 DBDataGetter.getFavorites(username) {
 
                                     val updatedRecipes = it
-                                    Log.d("TAG", it.toString())
                                     Log.d("TAG", "DONE GETTING FAVS FOR OTHER USER in Search" + username)
 
                                     val user = UserModel(username, updatedRecipes)
