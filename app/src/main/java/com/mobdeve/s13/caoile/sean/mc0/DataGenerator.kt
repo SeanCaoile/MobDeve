@@ -198,17 +198,44 @@ class DataGenerator {
                 .addOnSuccessListener { result ->
                     for (document in result) {
                         val username = document.getString("username")
+                        var favList: ArrayList<DocumentReference> = arrayListOf<DocumentReference>()
+                        try{
+                            favList = document.get("favorites") as ArrayList<DocumentReference>
+
+                        }
+                        catch (e: Exception) {
+                            Log.d("Error TAG" , e.toString())
+                        }
+
 
                         if (username != null && currentUser != username){
 //                            val recipes = document.get("favorites") as ArrayList<RecipeModel>
-                            val user = UserModel(username, arrayListOf<RecipeModel>(
-                                recipe1))
+                            if(favList.isEmpty()) {
+                                Log.d("TAGGERS", username.toString() + " favlist is empty")
+                                val user = UserModel(username, arrayListOf<RecipeModel>())
+                                users.add(user)
+                                onResult(users)
+                            }
+                            else {
 
-                            users.add(user)
+                                Log.d("TAGGERS", username.toString() + " favlist is not empty")
+                                DBDataGetter.getFavorites(username) {
+
+                                    val updatedRecipes = it
+                                    Log.d("TAG", it.toString())
+                                    Log.d("TAG", "DONE GETTING FAVS FOR OTHER USER in Search" + username)
+
+                                    val user = UserModel(username, updatedRecipes)
+
+                                    users.add(user)
+                                    onResult(users)
+                                }
+                            }
                         }
+
                     }
-                    Log.d("new searches","$users")
-                    onResult(users)
+                    //Log.d("new searches","$users")
+                    //onResult(users)
                 } .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents",exception)
                 }
