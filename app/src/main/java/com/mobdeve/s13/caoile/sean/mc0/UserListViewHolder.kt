@@ -7,12 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 class UserListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     private val userTV : TextView = itemView.findViewById(R.id.username)
 
-//    private val followButton : ImageButton = itemView.findViewById(R.id.followButton)
     fun bindData(user: UserModel){
         userTV.text = user.username
     }
-
-//    fun setDeleteOnClickListener(onClickListener: View.OnClickListener) {
-//        this.followButton.setOnClickListener(onClickListener)
-//    }
 }

@@ -1,8 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.os.Bundle
-import android.text.SpannableStringBuilder
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -96,7 +94,6 @@ class IngredientNewActivity : AppCompatActivity(){
                                 callback(true)
                             }
                             .addOnFailureListener { e ->
-                                // Handle error
                                 println("Error updating array: $e")
                                 showToast("Failed to add Ingredient")
 
@@ -108,7 +105,6 @@ class IngredientNewActivity : AppCompatActivity(){
         }
         .addOnFailureListener { e ->
             // Handle failure
-            // Log or display an error message
         }
     }
 

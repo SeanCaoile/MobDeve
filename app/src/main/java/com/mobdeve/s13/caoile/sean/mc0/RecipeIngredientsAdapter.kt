@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class RecipeIngredientsAdapter(private val withCheckBox: Boolean, private val data: ArrayList<IngredientModel>): RecyclerView.Adapter<RecipeIngredientsViewHolder>() {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeIngredientsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
@@ -14,7 +13,6 @@ class RecipeIngredientsAdapter(private val withCheckBox: Boolean, private val da
         } else {
             R.layout.ingredients_item_no_checkbox
         }
-
         val view = inflater.inflate(layoutResourceId, parent, false)
 
         return RecipeIngredientsViewHolder(view)

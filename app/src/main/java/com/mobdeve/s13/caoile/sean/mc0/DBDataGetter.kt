@@ -1,8 +1,6 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.content.ContentValues
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
@@ -12,12 +10,11 @@ import com.google.firebase.firestore.ktx.firestore
 
 class DBDataGetter {
     companion object{
-
         fun addFavoriteReference(reference: DocumentReference, user: String, favorited: Boolean) {
             val db = com.google.firebase.ktx.Firebase.firestore
 
             db.collection("users")
-                .whereEqualTo("username", user.toString()) //set to username later
+                .whereEqualTo("username", user)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -41,22 +38,19 @@ class DBDataGetter {
                                         Log.w("TAG", "Error removing reference", e)
                                     }
                             }
-
                         }
                     }
                 }
                 .addOnFailureListener { exception ->
                     Log.w(ContentValues.TAG, "Error getting documents.", exception)
                 }
-
-
         }
 
         fun checkIfFavorited(recipeRef: DocumentReference, user: String, onResult: (Boolean) -> (Unit)) {
             val db = com.google.firebase.ktx.Firebase.firestore
             Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR FAVORITE STATUS")
             db.collection("users")
-                .whereEqualTo("username", user.toString()) //set to username later
+                .whereEqualTo("username", user)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
@@ -80,8 +74,7 @@ class DBDataGetter {
             val db = com.google.firebase.ktx.Firebase.firestore
             Log.d("TAG", "finding current reference in DB " + creator + " " + recipeName)
             db.collection("recipes")
-                .whereEqualTo("name", recipeName) //set to username later
-                //.whereEqualTo("creator" , creator)
+                .whereEqualTo("name", recipeName)
                 .get()
                 .addOnSuccessListener { result ->
                     Log.d("TAG" , "Looking at result " + result.toString())
@@ -94,7 +87,6 @@ class DBDataGetter {
                                 val recipeReference = document.reference
                                 onResult(recipeReference)
                             }
-
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -116,14 +108,12 @@ class DBDataGetter {
                             dbFavStr?.forEach { fav ->
                                 fav.get().addOnSuccessListener { favDocumentSnapshot ->
                                     if (favDocumentSnapshot.exists()) {
-                                        // This favorite reference corresponds to an existing recipe
                                         val recipeId = fav.id
                                         favIDList.add(recipeId)
                                         Log.d("TAG", "Added recipe to favIDList: $recipeId")
                                     } else {
-                                        // This favorite reference does not correspond to any existing recipe
                                         Log.d("TAG", "Invalid recipe reference found: ${fav.id}")
-                                        // Handle this scenario as needed
+
                                         val userRef = document.reference
                                         userRef.update("favorites", FieldValue.arrayRemove(fav))
                                             .addOnSuccessListener {
@@ -133,9 +123,7 @@ class DBDataGetter {
                                                 Log.w("TAG", "Error removing invalid reference: ${e.message}")
                                             }
                                     }
-
                                     if (favIDList.size == dbFavStr.size) {
-                                        // All favorites processed, return the result
                                         onResult(favIDList)
                                     }
                                 }.addOnFailureListener { e ->
@@ -150,7 +138,6 @@ class DBDataGetter {
                 }
         }
 
-
         fun getFavorites(currentUser: String, onResult: (ArrayList<RecipeModel>) -> (Unit)) : ArrayList<RecipeModel>
         {
             val firestore = Firebase.firestore
@@ -160,27 +147,20 @@ class DBDataGetter {
                 val recipesDb = firestore.collection("recipes")
 
                 var favStrings = it
-//                Log.d("TAG", "Printing favStrings in getFavorites")
-//                Log.d("TAG", favStrings.toString())
+
                 recipesDb.get().addOnSuccessListener { result ->
                     for (document in result) {
-//                        Log.d("TAG", "Printing current recipe ID")
-//                        Log.d("TAG", document.id)
                         if(favStrings.contains(document.id)) {
-//                            Log.d("TAG", "Favorite Recipe Found " + document.id)
-
                             var creator = document.getString("creator").toString()
                             if (creator != null && (creator == currentUser || creator == "The Guru")){
                                 val ingredients = ArrayList<IngredientModel>()
                                 val ingredientElement = document.get("ingredients") as List<Map<String, Any>>
 
-                                //get each ingredient
                                 for (map in ingredientElement) {
-                                    // Now you can access individual elements in the map
                                     val ingredientName = map["ingredient"].toString()
                                     val measurement = map["measurement"].toString()
                                     val quantity: Float = (map["quantity"] as? Number)?.toFloat() ?: 0.0f
-                                    val ingredient: IngredientModel = IngredientModel(ingredientName, quantity, measurement)
+                                    val ingredient = IngredientModel(ingredientName, quantity, measurement)
 
                                     ingredients.add(ingredient)
                                 }
@@ -193,8 +173,6 @@ class DBDataGetter {
                                 val recipe = RecipeModel(ingredients,name,instructions,creator,image)
 
                                 recipes.add(recipe)
-//                                Log.d("TAG", "Added Rec list is now")
-//                                Log.d("TAG", recipe.toString())
                             }
                         }
                     }
@@ -209,7 +187,6 @@ class DBDataGetter {
             val db = com.google.firebase.ktx.Firebase.firestore
             var ingredientsList: ArrayList<IngredientModel> = arrayListOf<IngredientModel>()
 
-//            Log.i(ContentValues.TAG, "STARTING DB CONTENT CHECK FOR USER INGREDIENTS")
             db.collection("users")
                 .whereEqualTo("username", user)
                 .get()
@@ -223,8 +200,7 @@ class DBDataGetter {
                                 val name: String = userIngredient["ingredient"].toString()
                                 val measurement = userIngredient["measurement"].toString()
                                 val quantity = userIngredient["quantity"].toString()
-                                val newIngredient : IngredientModel = IngredientModel(name, quantity.toFloat(), measurement)
-//                                Log.d("NEWINGREDIENT","$newIngredient")
+                                val newIngredient = IngredientModel(name, quantity.toFloat(), measurement)
                                 ingredientsList.add(newIngredient)
                             }
                         }

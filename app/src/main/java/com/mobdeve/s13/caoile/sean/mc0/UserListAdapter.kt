@@ -1,9 +1,7 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class UserListAdapter(private val data: ArrayList<UserModel>, val userListClickListener: UserListClickListener): RecyclerView.Adapter<UserListViewHolder>() {
@@ -16,7 +14,6 @@ class UserListAdapter(private val data: ArrayList<UserModel>, val userListClickL
 
     override fun onBindViewHolder(holder: UserListViewHolder, position: Int) {
         holder.bindData(data.get(position))
-
         val user = data.get(position)
 
         holder.itemView.setOnClickListener {

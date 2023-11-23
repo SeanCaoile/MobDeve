@@ -1,6 +1,5 @@
 package com.mobdeve.s13.caoile.sean.mc0
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,16 +10,11 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
 import android.net.Uri
-import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-
 
 class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
 
@@ -37,7 +31,6 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
     private lateinit var getContent: ActivityResultLauncher<String>
     private var imgUploaded: Boolean = false
 
-    private lateinit var ingredientsList: ArrayList<IngredientModel>
     private val database = FirebaseFirestore.getInstance()
     private val recipesRef = database.collection("recipes")
 
@@ -47,7 +40,6 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
 
         val username = intent.getStringExtra("USERNAME_KEY").toString()
 
-        // Find views
         imgRecipe = findViewById(R.id.imgRecipe)
         btnUploadImage = findViewById(R.id.btnUploadImage)
         etRecipeName = findViewById(R.id.etRecipeName)
@@ -59,12 +51,10 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
 
         val imageUploadCallback = object : ImageUploadCallback {
             override fun onImageUploaded(imageURL: String) {
-                // Implement your logic upon successful image upload here
                 saveRecipeToFirebase(username, imageURL)
             }
 
             override fun onImageUploadFailed(exception: Exception) {
-                // Handle the failure scenario if image upload fails
                 Log.e("AddRecipeActivity", "Error uploading image to Firebase Storage", exception)
             }
         }
@@ -72,9 +62,7 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
         btnBack.setOnClickListener{
             finish()
         }
-        // Set click listener for btnSaveRecipe
         btnSaveRecipe.setOnClickListener {
-            // Call the function to upload the image
             if (!imgUploaded) {
                 imgRecipe.setImageResource(R.drawable.no_img)
             } else {
@@ -82,8 +70,6 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
             }
         }
 
-
-        // Set click listener for btnAddIngredient
         btnAddIngredient.setOnClickListener {
             Log.d("HELLO", "HELLO")
             addRowDynamically()
@@ -92,7 +78,7 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
         getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 imageUri = it
-                imgRecipe.setImageURI(it) // Display the selected image in an ImageView (imgRecipe)
+                imgRecipe.setImageURI(it)
             }
         }
 
@@ -108,9 +94,7 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
 
         imageRef.putFile(imageUri)
             .addOnSuccessListener { taskSnapshot ->
-                // Image uploaded successfully, get the download URL
                 imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Now you have the download URL, you can use it as imageURL in saveRecipeToFirebase
                     Log.d("AddedIMG", "SUCCESS")
                     val imageURL = uri.toString()
                     callback.onImageUploaded(imageURL)
@@ -118,14 +102,12 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
             }
             .addOnFailureListener { e ->
                 Log.e("AddRecipeActivity", "Error uploading image to Firebase Storage", e)
-                // Handle the error if the image upload fails
                 callback.onImageUploadFailed(e)
             }
-
     }
 
     private fun saveRecipeToFirebase(username: String, imageURL: String) {
-        // Get values from UI elements
+
         val recipeName = etRecipeName.text.toString()
         val instructions = etInstructions.text.toString()
         val ingredientsList = getIngredientsFromLayout()
@@ -135,7 +117,6 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
         } else if (instructions.isEmpty()) {
             etInstructions.error = "Instructions are empty"
         } else {
-            // Create a Recipe object
             val recipeDB = hashMapOf(
                 "creator" to username,
                 "imageURI" to imageURL,
@@ -149,12 +130,10 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
             recipesRef.add(recipeDB)
                 .addOnSuccessListener { documentReference ->
                     Log.d("AddRecipeActivity", "Recipe added with ID: ${documentReference.id}")
-                    // Finish the activity or navigate to another screen
                     finish()
                 }
                 .addOnFailureListener { e ->
                     Log.e("AddRecipeActivity", "Error adding recipe", e)
-                    // Handle the error, if necessary
                 }
         }
     }
@@ -162,7 +141,6 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
     private fun getIngredientsFromLayout(): ArrayList<IngredientModel> {
         val ingredients = ArrayList<IngredientModel>()
 
-        // Iterate through each child of llIngredients
         for (i in 0 until llIngredients.childCount) {
             val rowView = llIngredients.getChildAt(i)
             val etIngredientName = rowView.findViewById<EditText>(R.id.ingredientName)
@@ -184,7 +162,6 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
                 )
                 ingredients.add(ingredient)
             }
-
         }
 
         return ingredients
@@ -197,10 +174,8 @@ class AddRecipeActivity : AppCompatActivity(), ImageUploadCallback {
         val btnDelete = rowView.findViewById<Button>(R.id.btnDelete)
         btnDelete.setOnClickListener {
             val parentView = btnDelete.parent as View
-            // Remove the parent view (ingredient row) from llIngredients LinearLayout
             llIngredients.removeView(parentView)
         }
-
         llIngredients.addView(rowView)
     }
 

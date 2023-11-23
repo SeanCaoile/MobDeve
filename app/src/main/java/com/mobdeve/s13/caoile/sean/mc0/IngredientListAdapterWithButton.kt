@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class IngredientListAdapterWithButton (private val data: ArrayList<IngredientModel>, val ingredientsListListener: IngredientsListListener): RecyclerView.Adapter<IngredientsListViewHolder>() {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.ingredient_item_button, parent, false)

@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="24dp"
+    android:background="@color/lightYellow">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +20,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
 
             <ImageButton
                 android:id="@+id/backBtn"
@@ -39,7 +40,9 @@
             android:id="@+id/imgRecipe"
             android:layout_width="0dp"
             android:layout_height="200dp"
+            android:scaleY="1"
             android:scaleType="centerCrop"
+            android:src="@drawable/empty_img"
             app:layout_constraintTop_toBottomOf="@id/topCL"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
@@ -61,6 +64,7 @@
             app:layout_constraintTop_toBottomOf="@id/btnUploadImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:hint="Recipe Name"/>
 
@@ -72,18 +76,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
             android:hint="Recipe Instructions"
             android:lines="5"
             android:maxLines="10"
             android:inputType="textMultiLine"/>
+
+        <TextView
+            android:id="@+id/addIngredTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Ingredient: "
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/etInstructions"
+            app:layout_constraintLeft_toLeftOf="parent"></TextView>
 
         <Button
             android:id="@+id/btnAddIngredient"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:layout_constraintTop_toBottomOf="@id/etInstructions"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="0dp"
+            app:layout_constraintStart_toEndOf="@id/addIngredTxt"
             android:text="+"
             android:textSize="20sp"
             android:background="?android:attr/selectableItemBackground"
@@ -120,6 +134,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="30dp"
             android:text="Save Recipe"/>
 
