@@ -105,7 +105,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginTop="16dp"
-                    android:layout_marginHorizontal="16dp">
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="80dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -138,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/instructions"
                         android:textSize="20sp"
-                        android:layout_marginTop="8dp"/>
+                        android:layout_marginTop="8dp" />
 
                     <androidx.cardview.widget.CardView
                         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -185,8 +186,8 @@
             android:backgroundTint="#FFD2A1"
             android:clickable="true"
             app:maxImageSize="50dp"
-            app:layout_constraintBottom_toTopOf="@id/floatingActionButton"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
             app:srcCompat="@drawable/edit_icon" />
 
         <FrameLayout
